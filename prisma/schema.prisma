@@ -33,6 +33,7 @@ model Seller {
   uploadLinks   UploadLink[]
   payments      Payment[]
   internalNotes InternalNote[]
+  proposals     Proposal[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -89,6 +90,17 @@ model InternalNote {
   attachmentUrl String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Proposal {
+  id         String   @id @default(cuid())
+  sellerId   String
+  seller     Seller   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  fileName   String
+  fileUrl    String
+  shareable  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model AuditLog {

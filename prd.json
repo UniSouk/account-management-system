@@ -103,7 +103,7 @@
         "Save proposal",
         "Verify proposal visibility flag"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "category": "lifecycle-tracking",

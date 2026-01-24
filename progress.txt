@@ -96,3 +96,15 @@
 - Updated JWT and session callbacks to pass user id
 - Types check successfully, tests pass
 - Internal users can now view all actions with user, action type, entity, timestamp, and details for full accountability
+
+
+[2026-01-24] Proposal Management Feature Complete
+- Added Proposal model to Prisma schema (fileName, fileUrl, shareable, sellerId)
+- Created /api/sellers/[id]/proposals routes for GET (list) and POST (create)
+- Added Proposals section to seller profile page with upload form
+- Form includes fields for file name, file URL, and shareable checkbox
+- Proposals display with file name, visibility flag (Shareable/Internal Only), and creation date
+- Proposals are linked to seller via sellerId foreign key with cascade delete
+- Shareable flag defaults to false (internal only)
+- Types check successfully, tests pass
+- Internal users can now upload proposal documents, mark them as shareable or internal, and view all proposals for a seller

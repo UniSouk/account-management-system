@@ -52,6 +52,14 @@ type InternalNote = {
   createdAt: string;
 };
 
+type Proposal = {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  shareable: boolean;
+  createdAt: string;
+};
+
 export default function SellerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const [seller, setSeller] = useState<Seller | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -59,6 +67,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   const [payments, setPayments] = useState<Payment[]>([]);
   const [invoices, setInvoices] = useState<Record<string, Invoice[]>>({});
   const [internalNotes, setInternalNotes] = useState<InternalNote[]>([]);
+  const [proposals, setProposals] = useState<Proposal[]>([]);
   const [id, setId] = useState<string>("");
   const [fileName, setFileName] = useState("");
   const [fileUrl, setFileUrl] = useState("");
@@ -69,6 +78,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   const [proofOfPayment, setProofOfPayment] = useState("");
   const [noteContent, setNoteContent] = useState("");
   const [noteAttachment, setNoteAttachment] = useState("");
+  const [proposalFileName, setProposalFileName] = useState("");
+  const [proposalFileUrl, setProposalFileUrl] = useState("");
+  const [proposalShareable, setProposalShareable] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -79,6 +91,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       fetchUploadLinks(p.id);
       fetchPayments(p.id);
       fetchInternalNotes(p.id);
+      fetchProposals(p.id);
     });
   }, [params]);
 
@@ -128,6 +141,14 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     if (res.ok) {
       const data = await res.json();
       setInternalNotes(data);
+    }
+  };
+
+  const fetchProposals = async (sellerId: string) => {
+    const res = await fetch(`/api/sellers/${sellerId}/proposals`);
+    if (res.ok) {
+      const data = await res.json();
+      setProposals(data);
     }
   };
 
@@ -196,6 +217,21 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       setNoteContent("");
       setNoteAttachment("");
       fetchInternalNotes(id);
+    }
+  };
+
+  const handleAddProposal = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch(`/api/sellers/${id}/proposals`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fileName: proposalFileName, fileUrl: proposalFileUrl, shareable: proposalShareable }),
+    });
+    if (res.ok) {
+      setProposalFileName("");
+      setProposalFileUrl("");
+      setProposalShareable(false);
+      fetchProposals(id);
     }
   };
 
@@ -409,6 +445,69 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                     ) : (
                       <p className="text-sm text-gray-500">No invoices generated</p>
                     )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
+          <h2 className="text-2xl font-bold mb-4">Proposals</h2>
+          <form onSubmit={handleAddProposal} className="mb-6 space-y-4">
+            <div>
+              <input
+                type="text"
+                placeholder="Proposal file name"
+                value={proposalFileName}
+                onChange={(e) => setProposalFileName(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Proposal file URL"
+                value={proposalFileUrl}
+                onChange={(e) => setProposalFileUrl(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="shareable"
+                checked={proposalShareable}
+                onChange={(e) => setProposalShareable(e.target.checked)}
+                className="mr-2"
+              />
+              <label htmlFor="shareable">Mark as shareable</label>
+            </div>
+            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              Upload Proposal
+            </button>
+          </form>
+          <div className="space-y-4">
+            {proposals.length === 0 ? (
+              <p className="text-gray-500">No proposals yet</p>
+            ) : (
+              proposals.map((proposal) => (
+                <div key={proposal.id} className="border rounded p-4 bg-gray-50">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-semibold">{proposal.fileName}</p>
+                      <a href={proposal.fileUrl} className="text-blue-600 hover:text-blue-800 text-sm">
+                        View Proposal
+                      </a>
+                      <p className="text-sm mt-1">
+                        <span className={proposal.shareable ? "text-green-600" : "text-gray-600"}>
+                          {proposal.shareable ? "Shareable" : "Internal Only"}
+                        </span>
+                      </p>
+                    </div>
+                    <p className="text-xs text-gray-500">{new Date(proposal.createdAt).toLocaleString()}</p>
                   </div>
                 </div>
               ))
