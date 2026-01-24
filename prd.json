@@ -66,7 +66,7 @@
         "Save payment record",
         "Verify payment is linked to seller"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "category": "invoice-generation",

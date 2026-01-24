@@ -31,6 +31,7 @@ model Seller {
   address      String?
   documents    Document[]
   uploadLinks  UploadLink[]
+  payments     Payment[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 }
@@ -54,4 +55,16 @@ model UploadLink {
   used      Boolean  @default(false)
   createdAt DateTime @default(now())
   expiresAt DateTime
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  sellerId        String
+  seller          Seller   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  amount          Float
+  paymentDate     DateTime
+  reference       String?
+  proofOfPayment  String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

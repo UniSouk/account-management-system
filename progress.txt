@@ -47,3 +47,14 @@
 - Upload links display status (Active/Used/Expired) and expiration time
 - Types check successfully, tests pass
 - External sellers can now receive a one-time link, upload documents securely, and links automatically expire after single use
+
+
+[2026-01-24] Payments Feature Complete
+- Added Payment model to Prisma schema (amount, paymentDate, reference, proofOfPayment)
+- Created /api/sellers/[id]/payments routes for GET (list) and POST (create)
+- Added Payments section to seller profile page with payment recording form
+- Form includes fields for amount, payment date, reference (optional), and proof of payment URL
+- Payments display with amount, date, reference, recorded timestamp, and link to proof
+- Payments are linked to seller via sellerId foreign key with cascade delete
+- Types check successfully, tests pass
+- Internal users can now record payments with metadata, upload proof of payment, and view all payments for a seller

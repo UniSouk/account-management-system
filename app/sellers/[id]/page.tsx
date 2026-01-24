@@ -29,14 +29,28 @@ type UploadLink = {
   createdAt: string;
 };
 
+type Payment = {
+  id: string;
+  amount: number;
+  paymentDate: string;
+  reference: string | null;
+  proofOfPayment: string;
+  createdAt: string;
+};
+
 export default function SellerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const [seller, setSeller] = useState<Seller | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [uploadLinks, setUploadLinks] = useState<UploadLink[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [id, setId] = useState<string>("");
   const [fileName, setFileName] = useState("");
   const [fileUrl, setFileUrl] = useState("");
   const [tags, setTags] = useState("");
+  const [amount, setAmount] = useState("");
+  const [paymentDate, setPaymentDate] = useState("");
+  const [reference, setReference] = useState("");
+  const [proofOfPayment, setProofOfPayment] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -45,6 +59,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       fetchSeller(p.id);
       fetchDocuments(p.id);
       fetchUploadLinks(p.id);
+      fetchPayments(p.id);
     });
   }, [params]);
 
@@ -72,6 +87,14 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     }
   };
 
+  const fetchPayments = async (sellerId: string) => {
+    const res = await fetch(`/api/sellers/${sellerId}/payments`);
+    if (res.ok) {
+      const data = await res.json();
+      setPayments(data);
+    }
+  };
+
   const generateUploadLink = async () => {
     const res = await fetch(`/api/sellers/${id}/upload-links`, {
       method: "POST",
@@ -93,6 +116,27 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       setFileUrl("");
       setTags("");
       fetchDocuments(id);
+    }
+  };
+
+  const handlePayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch(`/api/sellers/${id}/payments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: parseFloat(amount),
+        paymentDate: new Date(paymentDate).toISOString(),
+        reference,
+        proofOfPayment,
+      }),
+    });
+    if (res.ok) {
+      setAmount("");
+      setPaymentDate("");
+      setReference("");
+      setProofOfPayment("");
+      fetchPayments(id);
     }
   };
 
@@ -206,6 +250,77 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                     </div>
                     <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
                       View
+                    </a>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
+          <h2 className="text-2xl font-bold mb-4">Payments</h2>
+          <form onSubmit={handlePayment} className="mb-6 space-y-4">
+            <div>
+              <input
+                type="number"
+                step="0.01"
+                placeholder="Amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="date"
+                placeholder="Payment Date"
+                value={paymentDate}
+                onChange={(e) => setPaymentDate(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Reference (optional)"
+                value={reference}
+                onChange={(e) => setReference(e.target.value)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Proof of Payment URL"
+                value={proofOfPayment}
+                onChange={(e) => setProofOfPayment(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              Record Payment
+            </button>
+          </form>
+
+          <div className="space-y-2">
+            {payments.length === 0 ? (
+              <p className="text-gray-500">No payments recorded yet</p>
+            ) : (
+              payments.map((payment) => (
+                <div key={payment.id} className="border p-4 rounded">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-medium text-lg">${payment.amount.toFixed(2)}</p>
+                      <p className="text-sm text-gray-600">Date: {new Date(payment.paymentDate).toLocaleDateString()}</p>
+                      {payment.reference && <p className="text-sm text-gray-600">Reference: {payment.reference}</p>}
+                      <p className="text-xs text-gray-400">Recorded: {new Date(payment.createdAt).toLocaleString()}</p>
+                    </div>
+                    <a href={payment.proofOfPayment} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+                      View Proof
                     </a>
                   </div>
                 </div>
