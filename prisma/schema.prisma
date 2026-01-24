@@ -23,19 +23,20 @@ model User {
 }
 
 model Seller {
-  id            String         @id @default(cuid())
-  businessName  String
-  contactName   String?
-  email         String?
-  phone         String?
-  address       String?
-  documents     Document[]
-  uploadLinks   UploadLink[]
-  payments      Payment[]
-  internalNotes InternalNote[]
-  proposals     Proposal[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id               String            @id @default(cuid())
+  businessName     String
+  contactName      String?
+  email            String?
+  phone            String?
+  address          String?
+  documents        Document[]
+  uploadLinks      UploadLink[]
+  payments         Payment[]
+  internalNotes    InternalNote[]
+  proposals        Proposal[]
+  lifecycleHistory LifecycleHistory[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 }
 
 model Document {
@@ -111,4 +112,14 @@ model AuditLog {
   entityId  String?
   details   String?
   createdAt DateTime @default(now())
+}
+
+model LifecycleHistory {
+  id          String   @id @default(cuid())
+  sellerId    String
+  seller      Seller   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  marketplace String
+  stage       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

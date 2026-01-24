@@ -60,6 +60,13 @@ type Proposal = {
   createdAt: string;
 };
 
+type LifecycleHistory = {
+  id: string;
+  marketplace: string;
+  stage: string;
+  createdAt: string;
+};
+
 export default function SellerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const [seller, setSeller] = useState<Seller | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -68,6 +75,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   const [invoices, setInvoices] = useState<Record<string, Invoice[]>>({});
   const [internalNotes, setInternalNotes] = useState<InternalNote[]>([]);
   const [proposals, setProposals] = useState<Proposal[]>([]);
+  const [lifecycleHistory, setLifecycleHistory] = useState<LifecycleHistory[]>([]);
   const [id, setId] = useState<string>("");
   const [fileName, setFileName] = useState("");
   const [fileUrl, setFileUrl] = useState("");
@@ -81,6 +89,8 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   const [proposalFileName, setProposalFileName] = useState("");
   const [proposalFileUrl, setProposalFileUrl] = useState("");
   const [proposalShareable, setProposalShareable] = useState(false);
+  const [marketplace, setMarketplace] = useState("");
+  const [stage, setStage] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -92,6 +102,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       fetchPayments(p.id);
       fetchInternalNotes(p.id);
       fetchProposals(p.id);
+      fetchLifecycleHistory(p.id);
     });
   }, [params]);
 
@@ -149,6 +160,14 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     if (res.ok) {
       const data = await res.json();
       setProposals(data);
+    }
+  };
+
+  const fetchLifecycleHistory = async (sellerId: string) => {
+    const res = await fetch(`/api/sellers/${sellerId}/lifecycle`);
+    if (res.ok) {
+      const data = await res.json();
+      setLifecycleHistory(data);
     }
   };
 
@@ -232,6 +251,20 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       setProposalFileUrl("");
       setProposalShareable(false);
       fetchProposals(id);
+    }
+  };
+
+  const handleUpdateLifecycle = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch(`/api/sellers/${id}/lifecycle`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ marketplace, stage }),
+    });
+    if (res.ok) {
+      setMarketplace("");
+      setStage("");
+      fetchLifecycleHistory(id);
     }
   };
 
@@ -508,6 +541,52 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                       </p>
                     </div>
                     <p className="text-xs text-gray-500">{new Date(proposal.createdAt).toLocaleString()}</p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
+          <h2 className="text-2xl font-bold mb-4">Lifecycle Tracking</h2>
+          <form onSubmit={handleUpdateLifecycle} className="mb-6 space-y-4">
+            <div>
+              <input
+                type="text"
+                placeholder="Marketplace (e.g., Amazon, Flipkart)"
+                value={marketplace}
+                onChange={(e) => setMarketplace(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Stage (e.g., Onboarding, Active, Suspended)"
+                value={stage}
+                onChange={(e) => setStage(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              Update Lifecycle
+            </button>
+          </form>
+          <div className="space-y-4">
+            {lifecycleHistory.length === 0 ? (
+              <p className="text-gray-500">No lifecycle history yet</p>
+            ) : (
+              lifecycleHistory.map((entry) => (
+                <div key={entry.id} className="border rounded p-4 bg-gray-50">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-semibold">{entry.marketplace}</p>
+                      <p className="text-sm text-gray-600">Stage: {entry.stage}</p>
+                    </div>
+                    <p className="text-xs text-gray-500">{new Date(entry.createdAt).toLocaleString()}</p>
                   </div>
                 </div>
               ))

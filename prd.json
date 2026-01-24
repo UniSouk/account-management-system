@@ -115,7 +115,7 @@
         "Save changes",
         "Verify lifecycle history is recorded with timestamp"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "category": "admin-configuration",

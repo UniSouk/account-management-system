@@ -108,3 +108,15 @@
 - Shareable flag defaults to false (internal only)
 - Types check successfully, tests pass
 - Internal users can now upload proposal documents, mark them as shareable or internal, and view all proposals for a seller
+
+
+[2026-01-24] Lifecycle Tracking Feature Complete
+- Added LifecycleHistory model to Prisma schema (marketplace, stage, sellerId)
+- Created /api/sellers/[id]/lifecycle routes for GET (list) and POST (create)
+- Added Lifecycle Tracking section to seller profile page with update form
+- Form includes fields for marketplace and lifecycle stage
+- History displays with marketplace, stage, and timestamp
+- Lifecycle entries are linked to seller via sellerId foreign key with cascade delete
+- History ordered by creation date (most recent first)
+- Types check successfully, tests pass
+- Internal users can now track seller lifecycle per marketplace, update stages, and view complete history with timestamps
