@@ -24,9 +24,14 @@ export default async function Home() {
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Internal Seller Management System
           </p>
-          <Link href="/sellers" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Manage Sellers
-          </Link>
+          <div className="flex gap-4">
+            <Link href="/sellers" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              Manage Sellers
+            </Link>
+            <Link href="/audit-logs" className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+              Audit Logs
+            </Link>
+          </div>
         </div>
       </main>
     </div>

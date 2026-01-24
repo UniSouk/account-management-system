@@ -82,3 +82,17 @@
 - Notes ordered by creation date (most recent first)
 - Types check successfully, tests pass
 - Internal users can now add structured notes, attach optional documents, and view all notes for a seller
+
+
+[2026-01-24] Audit and Visibility Feature Complete
+- Added AuditLog model to Prisma schema (userId, action, entityType, entityId, details)
+- Created audit logging utility function in lib/audit.ts
+- Added audit logging to seller creation (CREATE_SELLER action)
+- Added audit logging to document upload (UPLOAD_DOCUMENT action)
+- Created /api/audit-logs route to fetch audit logs
+- Built /audit-logs page to display audit log table
+- Added "Audit Logs" link to home page
+- Extended NextAuth session type to include user id
+- Updated JWT and session callbacks to pass user id
+- Types check successfully, tests pass
+- Internal users can now view all actions with user, action type, entity, timestamp, and details for full accountability

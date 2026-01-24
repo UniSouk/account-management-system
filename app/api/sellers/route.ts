@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { createAuditLog } from "@/lib/audit";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -31,5 +32,8 @@ export async function POST(request: Request) {
       address: body.address,
     },
   });
+  
+  await createAuditLog(session.user.id, "CREATE_SELLER", "Seller", seller.id, `Created seller: ${seller.businessName}`);
+  
   return NextResponse.json(seller);
 }

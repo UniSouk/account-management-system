@@ -139,7 +139,7 @@
         "Verify audit entry is created",
         "Confirm audit log includes user, action, and timestamp"
       ],
-      "passes": false
+      "passes": true
     }
   ]
 }
