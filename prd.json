@@ -1,0 +1,145 @@
+{
+  "title": "Internal Seller Management System – Functional Tests",
+  "description": "Functional test suite for an internal operations tool used by the Account Management team to manage seller onboarding, documents, payments, proposals, and marketplace lifecycle tracking. The system is accessed only by internal users.",
+  "stack": ["Next.js"],
+  "access_model": {
+    "type": "internal",
+    "roles": ["Admin", "Account Manager"]
+  },
+  "tasks": [
+    {
+      "category": "authentication",
+      "description": "Internal user authentication and access",
+      "steps": [
+        "Navigate to internal login page",
+        "Login using company credentials",
+        "Verify successful authentication",
+        "Ensure unauthorized users cannot access protected routes"
+      ],
+      "passes": true
+    },
+    {
+      "category": "seller-registry",
+      "description": "Create and manage seller records",
+      "steps": [
+        "Navigate to Sellers module",
+        "Click 'Add Seller'",
+        "Enter seller business details",
+        "Save seller record",
+        "Verify seller appears in seller list",
+        "Open seller profile to validate stored data"
+      ],
+      "passes": false
+    },
+    {
+      "category": "document-collection",
+      "description": "Collect and organize seller documents internally",
+      "steps": [
+        "Open seller profile",
+        "Navigate to Documents section",
+        "Upload seller document (KYC, PAN, Compliance)",
+        "Assign document tags",
+        "Verify document is stored and visible to internal users"
+      ],
+      "passes": false
+    },
+    {
+      "category": "one-time-upload-link",
+      "description": "Generate one-time document upload link for seller",
+      "steps": [
+        "Open seller profile",
+        "Generate one-time upload link",
+        "Share link externally via email or chat",
+        "Upload document using the link",
+        "Verify link expires after use",
+        "Confirm document appears under correct seller record"
+      ],
+      "passes": false
+    },
+    {
+      "category": "payments",
+      "description": "Record payments and upload proof",
+      "steps": [
+        "Navigate to seller Payments section",
+        "Upload proof-of-payment document",
+        "Enter payment metadata (amount, date, reference)",
+        "Save payment record",
+        "Verify payment is linked to seller"
+      ],
+      "passes": false
+    },
+    {
+      "category": "invoice-generation",
+      "description": "Generate and manage invoices",
+      "steps": [
+        "Open seller payment record",
+        "Generate invoice",
+        "Verify invoice number is created",
+        "Download invoice PDF",
+        "Confirm invoice is stored in seller profile"
+      ],
+      "passes": false
+    },
+    {
+      "category": "internal-communication",
+      "description": "Maintain internal notes and context",
+      "steps": [
+        "Open seller profile",
+        "Navigate to Internal Notes",
+        "Add structured internal note",
+        "Attach optional document",
+        "Save note",
+        "Verify note is visible only to internal users"
+      ],
+      "passes": false
+    },
+    {
+      "category": "proposal-management",
+      "description": "Upload and manage proposal documents",
+      "steps": [
+        "Navigate to Proposals section",
+        "Upload proposal document",
+        "Mark proposal as internal or shareable",
+        "Save proposal",
+        "Verify proposal visibility flag"
+      ],
+      "passes": false
+    },
+    {
+      "category": "lifecycle-tracking",
+      "description": "Track seller lifecycle per marketplace",
+      "steps": [
+        "Open seller profile",
+        "Select marketplace",
+        "Update lifecycle stage",
+        "Save changes",
+        "Verify lifecycle history is recorded with timestamp"
+      ],
+      "passes": false
+    },
+    {
+      "category": "admin-configuration",
+      "description": "Admin manages system configuration",
+      "steps": [
+        "Login as Admin",
+        "Navigate to Admin Settings",
+        "Configure document tags",
+        "Manage lifecycle stage definitions",
+        "Update system settings",
+        "Verify configurations apply across the platform"
+      ],
+      "passes": false
+    },
+    {
+      "category": "audit-and-visibility",
+      "description": "Track internal actions for accountability",
+      "steps": [
+        "Perform seller update action",
+        "Upload or modify a document",
+        "Verify audit entry is created",
+        "Confirm audit log includes user, action, and timestamp"
+      ],
+      "passes": false
+    }
+  ]
+}
