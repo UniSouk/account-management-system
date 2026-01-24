@@ -91,7 +91,7 @@
         "Save note",
         "Verify note is visible only to internal users"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "category": "proposal-management",

@@ -23,17 +23,18 @@ model User {
 }
 
 model Seller {
-  id           String       @id @default(cuid())
-  businessName String
-  contactName  String?
-  email        String?
-  phone        String?
-  address      String?
-  documents    Document[]
-  uploadLinks  UploadLink[]
-  payments     Payment[]
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id            String         @id @default(cuid())
+  businessName  String
+  contactName   String?
+  email         String?
+  phone         String?
+  address       String?
+  documents     Document[]
+  uploadLinks   UploadLink[]
+  payments      Payment[]
+  internalNotes InternalNote[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Document {
@@ -78,4 +79,14 @@ model Invoice {
   pdfUrl        String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model InternalNote {
+  id           String   @id @default(cuid())
+  sellerId     String
+  seller       Seller   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  content      String
+  attachmentUrl String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

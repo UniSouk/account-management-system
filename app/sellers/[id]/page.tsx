@@ -45,12 +45,20 @@ type Invoice = {
   createdAt: string;
 };
 
+type InternalNote = {
+  id: string;
+  content: string;
+  attachmentUrl: string | null;
+  createdAt: string;
+};
+
 export default function SellerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const [seller, setSeller] = useState<Seller | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [uploadLinks, setUploadLinks] = useState<UploadLink[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [invoices, setInvoices] = useState<Record<string, Invoice[]>>({});
+  const [internalNotes, setInternalNotes] = useState<InternalNote[]>([]);
   const [id, setId] = useState<string>("");
   const [fileName, setFileName] = useState("");
   const [fileUrl, setFileUrl] = useState("");
@@ -59,6 +67,8 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   const [paymentDate, setPaymentDate] = useState("");
   const [reference, setReference] = useState("");
   const [proofOfPayment, setProofOfPayment] = useState("");
+  const [noteContent, setNoteContent] = useState("");
+  const [noteAttachment, setNoteAttachment] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -68,6 +78,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       fetchDocuments(p.id);
       fetchUploadLinks(p.id);
       fetchPayments(p.id);
+      fetchInternalNotes(p.id);
     });
   }, [params]);
 
@@ -109,6 +120,14 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     if (res.ok) {
       const data = await res.json();
       setInvoices((prev) => ({ ...prev, [paymentId]: data }));
+    }
+  };
+
+  const fetchInternalNotes = async (sellerId: string) => {
+    const res = await fetch(`/api/sellers/${sellerId}/notes`);
+    if (res.ok) {
+      const data = await res.json();
+      setInternalNotes(data);
     }
   };
 
@@ -163,6 +182,20 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       setReference("");
       setProofOfPayment("");
       fetchPayments(id);
+    }
+  };
+
+  const handleAddNote = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch(`/api/sellers/${id}/notes`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: noteContent, attachmentUrl: noteAttachment || null }),
+    });
+    if (res.ok) {
+      setNoteContent("");
+      setNoteAttachment("");
+      fetchInternalNotes(id);
     }
   };
 
@@ -377,6 +410,51 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                       <p className="text-sm text-gray-500">No invoices generated</p>
                     )}
                   </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
+          <h2 className="text-2xl font-bold mb-4">Internal Notes</h2>
+          <form onSubmit={handleAddNote} className="mb-6 space-y-4">
+            <div>
+              <textarea
+                placeholder="Note content"
+                value={noteContent}
+                onChange={(e) => setNoteContent(e.target.value)}
+                className="w-full p-2 border rounded"
+                rows={4}
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Attachment URL (optional)"
+                value={noteAttachment}
+                onChange={(e) => setNoteAttachment(e.target.value)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              Add Note
+            </button>
+          </form>
+          <div className="space-y-4">
+            {internalNotes.length === 0 ? (
+              <p className="text-gray-500">No internal notes yet</p>
+            ) : (
+              internalNotes.map((note) => (
+                <div key={note.id} className="border rounded p-4 bg-gray-50">
+                  <p className="mb-2">{note.content}</p>
+                  {note.attachmentUrl && (
+                    <a href={note.attachmentUrl} className="text-blue-600 hover:text-blue-800 text-sm">
+                      View Attachment
+                    </a>
+                  )}
+                  <p className="text-xs text-gray-500 mt-2">{new Date(note.createdAt).toLocaleString()}</p>
                 </div>
               ))
             )}

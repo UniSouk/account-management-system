@@ -70,3 +70,15 @@
 - Regenerated Prisma client to include Invoice model
 - Types check successfully, tests pass
 - Internal users can now generate invoices from payment records, view invoice numbers, and download invoice PDFs
+
+
+[2026-01-24] Internal Communication Feature Complete
+- Added InternalNote model to Prisma schema (content, attachmentUrl, sellerId)
+- Created /api/sellers/[id]/notes routes for GET (list) and POST (create)
+- Added Internal Notes section to seller profile page with note form
+- Form includes fields for note content (required) and attachment URL (optional)
+- Notes display with content, attachment link, and creation timestamp
+- Notes are linked to seller via sellerId foreign key with cascade delete
+- Notes ordered by creation date (most recent first)
+- Types check successfully, tests pass
+- Internal users can now add structured notes, attach optional documents, and view all notes for a seller
