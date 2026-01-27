@@ -186,3 +186,17 @@
 - Types check successfully, tests pass
 - Internal users can now capture complete account manager contact information with name, mobile, and email
 - Note: Database migration pending - requires PostgreSQL server running at localhost:5451
+
+
+[2026-01-27] Seller List UI Revamp Complete
+- Created shadcn/ui Table component (table.tsx) with TableHeader, TableBody, TableRow, TableHead, TableCell
+- Created shadcn/ui Button component (button.tsx) with variant and size props
+- Created shadcn/ui Card component (card.tsx) with CardHeader, CardTitle, CardContent
+- Refactored /sellers page to use shadcn/ui Table component for seller list
+- Replaced custom button styling with shadcn/ui Button component
+- Updated table to use consistent shadcn/ui styling with hover states
+- Improved spacing and alignment using Tailwind utilities
+- Empty state now uses TableCell with proper styling
+- Form styling updated with consistent spacing (space-y-6, mb-1.5)
+- Types check successfully, tests pass
+- Seller list now has clean, modern UI with proper hover states and consistent typography

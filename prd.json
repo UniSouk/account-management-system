@@ -1,67 +1,95 @@
 {
-  "title": "Seller Management System – Document & Seller Detail Enhancements",
-  "description": "This PRD defines incremental changes to the existing internal Seller Management System. It covers only newly requested behavior and modifications and assumes all previously defined and implemented functionality remains unchanged.",
-  "scope": "change-only",
+  "title": "Seller Management System – UI Revamp",
+  "description": "This PRD defines a UI-only refresh for the existing internal Seller Management System. All functionality, data flow, and business logic are already implemented and must remain unchanged. The goal is to improve visual clarity, consistency, and usability using shadcn/ui components.",
+  "scope": "ui-only",
   "ui_standard": "shadcn/ui",
-  "changes": [
+  "constraints": [
+    "Do not modify backend logic, APIs, or database schema",
+    "Do not introduce new features or remove existing functionality",
+    "All changes must be limited to UI and layout"
+  ],
+  "ui_goals": [
+    "Make the interface visually clean and modern",
+    "Improve readability for dense operational data",
+    "Reduce cognitive load for account managers",
+    "Ensure consistent spacing, typography, and interaction patterns"
+  ],
+  "ui_changes": [
     {
-      "area": "Document Management",
-      "status": "COMPLETE",
-      "problem": "Documents are now stored in Google Drive, but the UI and data model do not clearly represent this.",
+      "area": "Global Layout",
       "requirements": [
-        "Documents must be represented only as Google Drive references.",
-        "Each document record must store and display the following fields: file name, tag, and Google Drive link.",
-        "Document links must be clickable and open in a new browser tab.",
-        "The document list must be displayed in a clear, structured layout suitable for frequent internal use."
-      ],
-      "explicit_removals": [
-        "One-time upload link functionality - REMOVED",
-        "Any UI or logic related to external file uploads - REMOVED"
-      ],
-      "ui_expectations": [
-        "Use shadcn/ui Table or List components to render document lists",
-        "Tags should be visually represented using shadcn/ui Badge components"
+        "Introduce a consistent page layout with header, content area, and optional sidebar",
+        "Apply consistent spacing and alignment across all pages",
+        "Use shadcn/ui layout patterns and Tailwind utilities"
       ]
     },
     {
-      "area": "Seller Creation & Editing",
+      "area": "Seller List",
       "status": "COMPLETE",
-      "problem": "Seller records do not currently capture ownership and service context clearly.",
       "requirements": [
-        "While creating or editing a seller, allow optional Account Manager information to be captured.",
-        "Account Manager details must include name, mobile number, and email address.",
-        "Account Manager information must not be mandatory and must not block seller creation."
-      ],
-      "ui_expectations": [
-        "Account Manager fields should be grouped logically using shadcn/ui Form components",
-        "Optional fields should be clearly marked as optional"
+        "Render seller list using shadcn/ui Table component",
+        "Use clear column headers and row spacing",
+        "Add subtle hover and focus states for rows",
+        "Ensure long text is truncated with tooltips where necessary"
       ]
     },
     {
-      "area": "Service Context",
-      "status": "COMPLETE",
-      "problem": "There is no single place to capture what services are being offered to a seller.",
+      "area": "Seller Profile Page",
       "requirements": [
-        "Add a single free-text note field on the seller profile for capturing service name(s).",
-        "The field should accept plain text and be editable after seller creation."
-      ],
-      "ui_expectations": [
-        "Use a shadcn/ui Textarea component",
-        "Field should be placed prominently within the seller profile"
+        "Split seller profile into clearly defined sections (Details, Documents, Payments, Notes)",
+        "Use shadcn/ui Card components to group related information",
+        "Maintain consistent section headings and spacing"
+      ]
+    },
+    {
+      "area": "Document List UI",
+      "requirements": [
+        "Display documents in a structured table layout",
+        "Columns must include file name, tag, and link",
+        "Use shadcn/ui Badge component for document tags",
+        "Use shadcn/ui Button or Link styling for clickable document links"
+      ]
+    },
+    {
+      "area": "Forms",
+      "requirements": [
+        "Refactor all forms to use shadcn/ui Form, Input, Select, and Textarea components",
+        "Ensure consistent label placement and validation messaging",
+        "Clearly indicate optional fields"
+      ]
+    },
+    {
+      "area": "Notes & Text Fields",
+      "requirements": [
+        "Use shadcn/ui Textarea for note fields",
+        "Ensure adequate height and spacing for readability",
+        "Maintain visual separation from other form elements"
+      ]
+    },
+    {
+      "area": "Feedback & States",
+      "requirements": [
+        "Use shadcn/ui components for loading states, empty states, and error states",
+        "Display clear empty-state messages when no data is present",
+        "Avoid raw browser alerts"
       ]
     }
   ],
+  "visual_guidelines": [
+    "Prefer neutral color palette with subtle accents",
+    "Use consistent typography scale",
+    "Avoid dense, ungrouped information blocks",
+    "UI should feel professional and efficient rather than decorative"
+  ],
   "non_goals": [
-    "Reworking existing seller flows",
-    "Introducing external user access",
-    "Adding new storage providers",
-    "Refactoring unrelated UI or backend logic"
+    "Changing workflows or business rules",
+    "Adding animations beyond subtle transitions",
+    "Introducing public-facing design elements"
   ],
   "success_criteria": [
-    "Users can view a clean, readable list of Google Drive documents with name, tag, and link",
-    "One-time upload links are fully removed from the system",
-    "Account Manager details can be optionally added to sellers",
-    "Service names can be captured in a dedicated seller note field",
-    "UI changes consistently use shadcn/ui components and appear visually polished"
+    "All screens use shadcn/ui components consistently",
+    "UI is visually cleaner and easier to scan than before",
+    "No functional or behavioral regressions are introduced",
+    "Account managers can perform the same tasks with improved clarity"
   ]
 }

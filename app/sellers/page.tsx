@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type Seller = {
   id: string;
@@ -61,150 +63,145 @@ export default function SellersPage() {
 
   return (
     <div className="min-h-screen p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold">Sellers</h1>
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
+          <Button onClick={() => setShowForm(!showForm)} variant={showForm ? "outline" : "default"}>
             {showForm ? "Cancel" : "Add Seller"}
-          </button>
+          </Button>
         </div>
 
         {showForm && (
-          <form onSubmit={handleSubmit} className="mb-8 p-6 border rounded-lg bg-white shadow">
-            <h2 className="text-xl font-semibold mb-4">Add New Seller</h2>
+          <form onSubmit={handleSubmit} className="p-6 border rounded-lg bg-card shadow-sm space-y-4">
+            <h2 className="text-xl font-semibold">Add New Seller</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Business Name *</label>
+                <label className="block text-sm font-medium mb-1.5">Business Name *</label>
                 <input
                   type="text"
                   required
                   value={formData.businessName}
                   onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded-md"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Contact Name</label>
+                <label className="block text-sm font-medium mb-1.5">Contact Name</label>
                 <input
                   type="text"
                   value={formData.contactName}
                   onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded-md"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
+                <label className="block text-sm font-medium mb-1.5">Email</label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded-md"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Phone</label>
+                <label className="block text-sm font-medium mb-1.5">Phone</label>
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded-md"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Address</label>
+                <label className="block text-sm font-medium mb-1.5">Address</label>
                 <textarea
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded-md"
                   rows={3}
                 />
               </div>
-              <div className="border-t pt-4 mt-4">
+              <div className="border-t pt-4">
                 <h4 className="text-sm font-semibold mb-3">Account Manager (Optional)</h4>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Name</label>
+                    <label className="block text-sm font-medium mb-1.5">Name</label>
                     <input
                       type="text"
                       value={formData.accountManagerName}
                       onChange={(e) => setFormData({ ...formData, accountManagerName: e.target.value })}
-                      className="w-full px-3 py-2 border rounded"
+                      className="w-full px-3 py-2 border rounded-md"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Mobile Number</label>
+                    <label className="block text-sm font-medium mb-1.5">Mobile Number</label>
                     <input
                       type="text"
                       value={formData.accountManagerMobile}
                       onChange={(e) => setFormData({ ...formData, accountManagerMobile: e.target.value })}
-                      className="w-full px-3 py-2 border rounded"
+                      className="w-full px-3 py-2 border rounded-md"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Email Address</label>
+                    <label className="block text-sm font-medium mb-1.5">Email Address</label>
                     <input
                       type="email"
                       value={formData.accountManagerEmail}
                       onChange={(e) => setFormData({ ...formData, accountManagerEmail: e.target.value })}
-                      className="w-full px-3 py-2 border rounded"
+                      className="w-full px-3 py-2 border rounded-md"
                     />
                   </div>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Service Note</label>
+                <label className="block text-sm font-medium mb-1.5">Service Note</label>
                 <textarea
                   value={formData.serviceNote}
                   onChange={(e) => setFormData({ ...formData, serviceNote: e.target.value })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded-md"
                   rows={3}
                 />
               </div>
-              <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-                Save Seller
-              </button>
+              <Button type="submit">Save Seller</Button>
             </div>
           </form>
         )}
 
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Business Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contact</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {sellers.map((seller) => (
-                <tr key={seller.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">{seller.businessName}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{seller.contactName || "-"}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{seller.email || "-"}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{seller.phone || "-"}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => router.push(`/sellers/${seller.id}`)}
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      View
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {sellers.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              No sellers yet. Click "Add Seller" to create one.
-            </div>
-          )}
+        <div className="border rounded-lg">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Business Name</TableHead>
+                <TableHead>Contact</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sellers.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-12 text-muted-foreground">
+                    No sellers yet. Click "Add Seller" to create one.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                sellers.map((seller) => (
+                  <TableRow key={seller.id}>
+                    <TableCell className="font-medium">{seller.businessName}</TableCell>
+                    <TableCell>{seller.contactName || "-"}</TableCell>
+                    <TableCell>{seller.email || "-"}</TableCell>
+                    <TableCell>{seller.phone || "-"}</TableCell>
+                    <TableCell>
+                      <Button variant="link" onClick={() => router.push(`/sellers/${seller.id}`)} className="p-0 h-auto">
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </div>
       </div>
     </div>
