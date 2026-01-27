@@ -132,3 +132,13 @@
 - Edit button toggles between view and edit modes on seller profile
 - Types check successfully, tests pass
 - Internal users can now edit all seller information including assigning account managers and capturing service notes
+
+
+[2026-01-27] Document Edit/Delete Feature Complete
+- Created PUT and DELETE endpoints at /api/documents/[id] for updating and removing documents
+- Added edit mode toggle for each document in seller profile page
+- Edit form includes inline fields for fileName, fileUrl, and tags
+- Added delete button with confirmation dialog
+- Edit and delete buttons appear alongside view link for each document
+- Types check successfully, tests pass
+- Internal users can now correct document metadata mistakes and remove outdated documents

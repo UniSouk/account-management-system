@@ -103,6 +103,8 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   const [proposalShareable, setProposalShareable] = useState(false);
   const [marketplace, setMarketplace] = useState("");
   const [stage, setStage] = useState("");
+  const [editingDocId, setEditingDocId] = useState<string | null>(null);
+  const [editDocForm, setEditDocForm] = useState({ fileName: "", fileUrl: "", tags: "" });
   const router = useRouter();
 
   useEffect(() => {
@@ -236,6 +238,24 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       setTags("");
       fetchDocuments(id);
     }
+  };
+
+  const handleEditDocument = async (docId: string) => {
+    const res = await fetch(`/api/documents/${docId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editDocForm),
+    });
+    if (res.ok) {
+      setEditingDocId(null);
+      fetchDocuments(id);
+    }
+  };
+
+  const handleDeleteDocument = async (docId: string) => {
+    if (!confirm("Delete this document?")) return;
+    const res = await fetch(`/api/documents/${docId}`, { method: "DELETE" });
+    if (res.ok) fetchDocuments(id);
   };
 
   const handlePayment = async (e: React.FormEvent) => {
@@ -492,16 +512,61 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             ) : (
               documents.map((doc) => (
                 <div key={doc.id} className="border p-4 rounded">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-medium">{doc.fileName}</p>
-                      <p className="text-sm text-gray-600">Tags: {doc.tags}</p>
-                      <p className="text-xs text-gray-400">{new Date(doc.createdAt).toLocaleString()}</p>
+                  {editingDocId === doc.id ? (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={editDocForm.fileName}
+                        onChange={(e) => setEditDocForm({ ...editDocForm, fileName: e.target.value })}
+                        className="w-full p-2 border rounded"
+                      />
+                      <input
+                        type="text"
+                        value={editDocForm.fileUrl}
+                        onChange={(e) => setEditDocForm({ ...editDocForm, fileUrl: e.target.value })}
+                        className="w-full p-2 border rounded"
+                      />
+                      <input
+                        type="text"
+                        value={editDocForm.tags}
+                        onChange={(e) => setEditDocForm({ ...editDocForm, tags: e.target.value })}
+                        className="w-full p-2 border rounded"
+                      />
+                      <div className="flex gap-2">
+                        <button onClick={() => handleEditDocument(doc.id)} className="bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                          Save
+                        </button>
+                        <button onClick={() => setEditingDocId(null)} className="bg-gray-400 text-white px-3 py-1 rounded text-sm">
+                          Cancel
+                        </button>
+                      </div>
                     </div>
-                    <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
-                      View
-                    </a>
-                  </div>
+                  ) : (
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-medium">{doc.fileName}</p>
+                        <p className="text-sm text-gray-600">Tags: {doc.tags}</p>
+                        <p className="text-xs text-gray-400">{new Date(doc.createdAt).toLocaleString()}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+                          View
+                        </a>
+                        <button
+                          onClick={() => {
+                            setEditingDocId(doc.id);
+                            setEditDocForm({ fileName: doc.fileName, fileUrl: doc.fileUrl, tags: doc.tags });
+                          }}
+                          className="text-green-600 hover:text-green-800"
+                        >
+                          Edit
+                        </button>
+                        <button onClick={() => handleDeleteDocument(doc.id)} className="text-red-600 hover:text-red-800">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))
             )}

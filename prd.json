@@ -38,7 +38,7 @@
         "Add document entry with file name, tag, and Google Drive link",
         "Display document list in a structured and readable format",
         "Open document via clickable Google Drive link",
-        "Edit or remove document metadata"
+        "Edit or remove document metadata - COMPLETE"
       ],
       "explicitly_excluded": ["One-time upload links", "Direct file uploads"]
     },
