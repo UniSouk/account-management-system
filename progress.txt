@@ -238,3 +238,17 @@
 - Optional fields clearly marked with muted-foreground text
 - Types check successfully, tests pass
 - All pages now have consistent layout, navigation, and styling with shadcn/ui components throughout
+
+
+[2026-01-27] Login Page UI Refactor Complete
+- Created shadcn/ui Alert component with destructive variant for error messages
+- Refactored login page to use shadcn/ui Card, CardHeader, CardTitle, CardContent
+- Replaced native HTML input elements with shadcn/ui Input component
+- Replaced native HTML label elements with shadcn/ui Label component
+- Replaced native HTML button with shadcn/ui Button component
+- Error messages now use Alert component with AlertDescription
+- Updated background to bg-gray-50 for consistency with other pages
+- Improved form spacing with space-y-2 for fields and space-y-6 for sections
+- Types check successfully, tests pass
+- Login page now fully complies with shadcn/ui mandatory usage policy
+- All UI refactor targets in PRD are now complete (Seller List, Seller Profile, Document Section, Forms, Notes & Service Field, Feedback & States)

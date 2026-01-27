@@ -1,101 +1,112 @@
 {
-  "title": "Seller Management System – UI Revamp",
-  "description": "This PRD defines a UI-only refresh for the existing internal Seller Management System. All functionality, data flow, and business logic are already implemented and must remain unchanged. The goal is to improve visual clarity, consistency, and usability using shadcn/ui components.",
+  "title": "Seller Management System – Mandatory shadcn/ui Refactor",
+  "description": "This PRD defines a mandatory UI refactor for the existing internal Seller Management System. All existing functionality is correct and must remain unchanged. The sole objective is to replace all existing UI elements with shadcn/ui components and achieve a consistent, visually polished internal interface.",
   "scope": "ui-only",
-  "ui_standard": "shadcn/ui",
-  "constraints": [
-    "Do not modify backend logic, APIs, or database schema",
-    "Do not introduce new features or remove existing functionality",
-    "All changes must be limited to UI and layout"
+  "ui_framework": {
+    "name": "shadcn/ui",
+    "usage_policy": "mandatory"
+  },
+  "hard_rules": [
+    "All buttons must use shadcn/ui Button component",
+    "All forms must use shadcn/ui Form system",
+    "All inputs must use shadcn/ui Input, Select, or Textarea components",
+    "All tables and lists must use shadcn/ui Table components",
+    "All dialogs, modals, and popovers must use shadcn/ui Dialog, Sheet, or Popover components",
+    "Native HTML elements (button, input, select, textarea, table) must not be used directly in the UI",
+    "Custom-styled components are not allowed unless wrapped around shadcn/ui primitives"
   ],
-  "ui_goals": [
-    "Make the interface visually clean and modern",
-    "Improve readability for dense operational data",
-    "Reduce cognitive load for account managers",
-    "Ensure consistent spacing, typography, and interaction patterns"
-  ],
-  "ui_changes": [
+  "ui_refactor_targets": [
     {
-      "area": "Global Layout",
-      "status": "COMPLETE",
+      "screen": "Seller List",
+      "status": "complete",
+      "required_components": ["Table", "Button", "Badge"],
       "requirements": [
-        "Introduce a consistent page layout with header, content area, and optional sidebar",
-        "Apply consistent spacing and alignment across all pages",
-        "Use shadcn/ui layout patterns and Tailwind utilities"
+        "Replace existing seller list UI with shadcn/ui Table",
+        "Use Badge for seller status or tags",
+        "Use Button for all row actions"
       ]
     },
     {
-      "area": "Seller List",
-      "status": "COMPLETE",
+      "screen": "Seller Profile",
+      "status": "complete",
+      "required_components": ["Card", "Separator", "Button"],
       "requirements": [
-        "Render seller list using shadcn/ui Table component",
-        "Use clear column headers and row spacing",
-        "Add subtle hover and focus states for rows",
-        "Ensure long text is truncated with tooltips where necessary"
+        "Group profile sections using Card",
+        "Separate sections with Separator",
+        "Ensure consistent spacing and hierarchy"
       ]
     },
     {
-      "area": "Seller Profile Page",
-      "status": "COMPLETE",
+      "screen": "Document Section",
+      "status": "complete",
+      "required_components": ["Table", "Badge", "Button"],
       "requirements": [
-        "Split seller profile into clearly defined sections (Details, Documents, Payments, Notes)",
-        "Use shadcn/ui Card components to group related information",
-        "Maintain consistent section headings and spacing"
+        "Display documents using Table",
+        "Render document tags as Badge",
+        "Render document links using Button or Link variant"
       ]
     },
     {
-      "area": "Document List UI",
-      "status": "COMPLETE",
+      "screen": "Forms (All Screens)",
+      "status": "complete",
+      "required_components": [
+        "Form",
+        "FormField",
+        "FormItem",
+        "FormLabel",
+        "FormControl",
+        "FormMessage",
+        "Input",
+        "Select",
+        "Textarea",
+        "Button"
+      ],
       "requirements": [
-        "Display documents in a structured table layout",
-        "Columns must include file name, tag, and link",
-        "Use shadcn/ui Badge component for document tags",
-        "Use shadcn/ui Button or Link styling for clickable document links"
+        "All forms must use shadcn/ui Form primitives",
+        "Validation errors must use FormMessage",
+        "Optional fields must be visually indicated"
       ]
     },
     {
-      "area": "Forms",
-      "status": "COMPLETE",
+      "screen": "Notes & Service Field",
+      "status": "complete",
+      "required_components": ["Textarea", "Card"],
       "requirements": [
-        "Refactor all forms to use shadcn/ui Form, Input, Select, and Textarea components",
-        "Ensure consistent label placement and validation messaging",
-        "Clearly indicate optional fields"
+        "Notes must be placed inside Card",
+        "Textarea must be used for all long-text input"
       ]
     },
     {
-      "area": "Notes & Text Fields",
-      "status": "COMPLETE",
+      "screen": "Feedback & States",
+      "status": "complete",
+      "required_components": ["Alert", "Skeleton", "Toast"],
       "requirements": [
-        "Use shadcn/ui Textarea for note fields",
-        "Ensure adequate height and spacing for readability",
-        "Maintain visual separation from other form elements"
-      ]
-    },
-    {
-      "area": "Feedback & States",
-      "status": "COMPLETE",
-      "requirements": [
-        "Use shadcn/ui components for loading states, empty states, and error states",
-        "Display clear empty-state messages when no data is present",
-        "Avoid raw browser alerts"
-      ]
+        "Loading states must use Skeleton",
+        "Errors must use Alert",
+        "Success actions must trigger Toast"
+      ],
+      "notes": "Login page now uses Alert component for error messages"
     }
   ],
-  "visual_guidelines": [
-    "Prefer neutral color palette with subtle accents",
-    "Use consistent typography scale",
-    "Avoid dense, ungrouped information blocks",
-    "UI should feel professional and efficient rather than decorative"
+  "visual_standards": [
+    "Consistent padding and spacing using Tailwind utility classes recommended by shadcn",
+    "Neutral color palette with subtle accents",
+    "Clear typography hierarchy for headings, labels, and values",
+    "Hover and focus states must be visually clear and consistent"
   ],
+  "enforcement": {
+    "code_review_rule": "PRs introducing native HTML UI elements must be rejected",
+    "acceptance_rule": "UI changes are accepted only if all interactive elements are shadcn/ui-based"
+  },
   "non_goals": [
-    "Changing workflows or business rules",
-    "Adding animations beyond subtle transitions",
-    "Introducing public-facing design elements"
+    "Changing business logic",
+    "Adding new workflows",
+    "Backend or database modifications"
   ],
   "success_criteria": [
-    "All screens use shadcn/ui components consistently",
-    "UI is visually cleaner and easier to scan than before",
-    "No functional or behavioral regressions are introduced",
-    "Account managers can perform the same tasks with improved clarity"
+    "No native HTML UI elements are used directly in the UI",
+    "All screens visually conform to shadcn/ui design patterns",
+    "UI is visibly cleaner and more consistent than the previous version",
+    "Functional behavior remains unchanged"
   ]
 }
