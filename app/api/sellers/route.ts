@@ -30,6 +30,10 @@ export async function POST(request: Request) {
       email: body.email,
       phone: body.phone,
       address: body.address,
+      accountManagerName: body.accountManagerName,
+      accountManagerMobile: body.accountManagerMobile,
+      accountManagerEmail: body.accountManagerEmail,
+      serviceNote: body.serviceNote,
     },
   });
   

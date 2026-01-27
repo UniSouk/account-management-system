@@ -172,3 +172,17 @@
 - Types check successfully, tests pass
 - System now exclusively uses internal document upload, no external upload links exist
 - Note: Database migration pending - requires PostgreSQL server running at localhost:5451
+
+
+[2026-01-27] Structured Account Manager Fields Complete
+- Replaced single accountManager field with three structured fields in Prisma schema
+- Added accountManagerName, accountManagerMobile, accountManagerEmail fields to Seller model
+- Updated seller profile page to display and edit three separate account manager fields
+- Updated seller creation form to include three account manager fields
+- Grouped account manager fields with visual separation and "Optional" label
+- Updated API routes to accept and store structured account manager data
+- Service Note field already implemented and working (serviceNote field)
+- Regenerated Prisma client with updated schema
+- Types check successfully, tests pass
+- Internal users can now capture complete account manager contact information with name, mobile, and email
+- Note: Database migration pending - requires PostgreSQL server running at localhost:5451

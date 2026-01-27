@@ -23,21 +23,23 @@ model User {
 }
 
 model Seller {
-  id               String             @id @default(cuid())
-  businessName     String
-  contactName      String?
-  email            String?
-  phone            String?
-  address          String?
-  accountManager   String?
-  serviceNote      String?
-  documents        Document[]
-  payments         Payment[]
-  internalNotes    InternalNote[]
-  proposals        Proposal[]
-  lifecycleHistory LifecycleHistory[]
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  id                    String             @id @default(cuid())
+  businessName          String
+  contactName           String?
+  email                 String?
+  phone                 String?
+  address               String?
+  accountManagerName    String?
+  accountManagerMobile  String?
+  accountManagerEmail   String?
+  serviceNote           String?
+  documents             Document[]
+  payments              Payment[]
+  internalNotes         InternalNote[]
+  proposals             Proposal[]
+  lifecycleHistory      LifecycleHistory[]
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
 }
 
 model Document {

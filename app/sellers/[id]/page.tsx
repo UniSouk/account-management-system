@@ -10,7 +10,9 @@ type Seller = {
   email: string | null;
   phone: string | null;
   address: string | null;
-  accountManager: string | null;
+  accountManagerName: string | null;
+  accountManagerMobile: string | null;
+  accountManagerEmail: string | null;
   serviceNote: string | null;
   createdAt: string;
 };
@@ -77,7 +79,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     email: "",
     phone: "",
     address: "",
-    accountManager: "",
+    accountManagerName: "",
+    accountManagerMobile: "",
+    accountManagerEmail: "",
     serviceNote: "",
   });
   const [fileName, setFileName] = useState("");
@@ -121,7 +125,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         email: data.email || "",
         phone: data.phone || "",
         address: data.address || "",
-        accountManager: data.accountManager || "",
+        accountManagerName: data.accountManagerName || "",
+        accountManagerMobile: data.accountManagerMobile || "",
+        accountManagerEmail: data.accountManagerEmail || "",
         serviceNote: data.serviceNote || "",
       });
     }
@@ -361,14 +367,37 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   className="w-full p-2 border rounded"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Account Manager</label>
-                <input
-                  type="text"
-                  value={editForm.accountManager}
-                  onChange={(e) => setEditForm({ ...editForm, accountManager: e.target.value })}
-                  className="w-full p-2 border rounded"
-                />
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-semibold text-gray-700 mb-3">Account Manager (Optional)</h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                    <input
+                      type="text"
+                      value={editForm.accountManagerName}
+                      onChange={(e) => setEditForm({ ...editForm, accountManagerName: e.target.value })}
+                      className="w-full p-2 border rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                    <input
+                      type="text"
+                      value={editForm.accountManagerMobile}
+                      onChange={(e) => setEditForm({ ...editForm, accountManagerMobile: e.target.value })}
+                      className="w-full p-2 border rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <input
+                      type="email"
+                      value={editForm.accountManagerEmail}
+                      onChange={(e) => setEditForm({ ...editForm, accountManagerEmail: e.target.value })}
+                      className="w-full p-2 border rounded"
+                    />
+                  </div>
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Service Note</label>
@@ -401,9 +430,22 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 <label className="text-sm font-medium text-gray-500">Address</label>
                 <p className="text-lg">{seller.address || "-"}</p>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Account Manager</label>
-                <p className="text-lg">{seller.accountManager || "-"}</p>
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-semibold text-gray-700 mb-3">Account Manager</h4>
+                <div className="space-y-2">
+                  <div>
+                    <label className="text-sm font-medium text-gray-500">Name</label>
+                    <p className="text-lg">{seller.accountManagerName || "-"}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-500">Mobile Number</label>
+                    <p className="text-lg">{seller.accountManagerMobile || "-"}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-500">Email Address</label>
+                    <p className="text-lg">{seller.accountManagerEmail || "-"}</p>
+                  </div>
+                </div>
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-500">Service Note</label>

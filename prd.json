@@ -25,6 +25,7 @@
     },
     {
       "area": "Seller Creation & Editing",
+      "status": "COMPLETE",
       "problem": "Seller records do not currently capture ownership and service context clearly.",
       "requirements": [
         "While creating or editing a seller, allow optional Account Manager information to be captured.",
@@ -38,6 +39,7 @@
     },
     {
       "area": "Service Context",
+      "status": "COMPLETE",
       "problem": "There is no single place to capture what services are being offered to a seller.",
       "requirements": [
         "Add a single free-text note field on the seller profile for capturing service name(s).",

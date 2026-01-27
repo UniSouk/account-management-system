@@ -10,7 +10,9 @@ type Seller = {
   email: string | null;
   phone: string | null;
   address: string | null;
-  accountManager: string | null;
+  accountManagerName: string | null;
+  accountManagerMobile: string | null;
+  accountManagerEmail: string | null;
   serviceNote: string | null;
   createdAt: string;
 };
@@ -24,7 +26,9 @@ export default function SellersPage() {
     email: "",
     phone: "",
     address: "",
-    accountManager: "",
+    accountManagerName: "",
+    accountManagerMobile: "",
+    accountManagerEmail: "",
     serviceNote: "",
   });
   const router = useRouter();
@@ -50,7 +54,7 @@ export default function SellersPage() {
     });
     if (res.ok) {
       setShowForm(false);
-      setFormData({ businessName: "", contactName: "", email: "", phone: "", address: "", accountManager: "", serviceNote: "" });
+      setFormData({ businessName: "", contactName: "", email: "", phone: "", address: "", accountManagerName: "", accountManagerMobile: "", accountManagerEmail: "", serviceNote: "" });
       fetchSellers();
     }
   };
@@ -118,14 +122,37 @@ export default function SellersPage() {
                   rows={3}
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Account Manager</label>
-                <input
-                  type="text"
-                  value={formData.accountManager}
-                  onChange={(e) => setFormData({ ...formData, accountManager: e.target.value })}
-                  className="w-full px-3 py-2 border rounded"
-                />
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-semibold mb-3">Account Manager (Optional)</h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Name</label>
+                    <input
+                      type="text"
+                      value={formData.accountManagerName}
+                      onChange={(e) => setFormData({ ...formData, accountManagerName: e.target.value })}
+                      className="w-full px-3 py-2 border rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Mobile Number</label>
+                    <input
+                      type="text"
+                      value={formData.accountManagerMobile}
+                      onChange={(e) => setFormData({ ...formData, accountManagerMobile: e.target.value })}
+                      className="w-full px-3 py-2 border rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Email Address</label>
+                    <input
+                      type="email"
+                      value={formData.accountManagerEmail}
+                      onChange={(e) => setFormData({ ...formData, accountManagerEmail: e.target.value })}
+                      className="w-full px-3 py-2 border rounded"
+                    />
+                  </div>
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Service Note</label>
