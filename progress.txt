@@ -200,3 +200,23 @@
 - Form styling updated with consistent spacing (space-y-6, mb-1.5)
 - Types check successfully, tests pass
 - Seller list now has clean, modern UI with proper hover states and consistent typography
+
+
+[2026-01-27] Seller Profile Page UI Revamp Complete
+- Refactored seller profile page to use shadcn/ui Card components for all sections
+- Created Input, Label, Textarea, and Badge shadcn/ui components
+- Updated Button component to support asChild prop with Radix UI Slot
+- Installed @radix-ui/react-label and @radix-ui/react-slot dependencies
+- Split profile into clearly defined Card sections: Details, Documents, Payments, Proposals, Lifecycle, Notes
+- Replaced all custom form inputs with shadcn/ui Input and Textarea components
+- Replaced all custom labels with shadcn/ui Label component
+- Updated document tags to use Badge component with secondary variant
+- Improved form spacing and layout with consistent space-y-* utilities
+- Added grid layout for seller details in view mode (2 columns)
+- Updated all buttons to use shadcn/ui Button component with appropriate variants
+- Changed page background to bg-gray-50 for better visual separation
+- Increased max-width from max-w-4xl to max-w-6xl for better content display
+- Used muted-foreground color for labels and secondary text
+- Empty states now use centered text with muted-foreground color
+- Types check successfully, tests pass
+- Seller profile page now has clean, modern UI with proper Card-based sections and consistent shadcn/ui styling

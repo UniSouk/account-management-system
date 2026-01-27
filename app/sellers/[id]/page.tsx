@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type Seller = {
   id: string;
@@ -304,518 +311,517 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   if (!seller) return <div className="p-8">Loading...</div>;
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
-        <button onClick={() => router.push("/sellers")} className="mb-4 text-blue-600 hover:text-blue-800">
+    <div className="min-h-screen p-8 bg-gray-50">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <Button variant="ghost" onClick={() => router.push("/sellers")}>
           ← Back to Sellers
-        </button>
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold">{seller.businessName}</h1>
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              {isEditing ? "Cancel" : "Edit"}
-            </button>
-          </div>
-          {isEditing ? (
-            <form onSubmit={handleUpdateSeller} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
-                <input
-                  type="text"
-                  value={editForm.businessName}
-                  onChange={(e) => setEditForm({ ...editForm, businessName: e.target.value })}
-                  className="w-full p-2 border rounded"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
-                <input
-                  type="text"
-                  value={editForm.contactName}
-                  onChange={(e) => setEditForm({ ...editForm, contactName: e.target.value })}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  value={editForm.email}
-                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                <input
-                  type="text"
-                  value={editForm.phone}
-                  onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                <input
-                  type="text"
-                  value={editForm.address}
-                  onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              <div className="border-t pt-4 mt-4">
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">Account Manager (Optional)</h4>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                    <input
-                      type="text"
+        </Button>
+
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-3xl">{seller.businessName}</CardTitle>
+              <Button onClick={() => setIsEditing(!isEditing)}>
+                {isEditing ? "Cancel" : "Edit"}
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {isEditing ? (
+              <form onSubmit={handleUpdateSeller} className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="businessName">Business Name</Label>
+                  <Input
+                    id="businessName"
+                    value={editForm.businessName}
+                    onChange={(e) => setEditForm({ ...editForm, businessName: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="contactName">Contact Name</Label>
+                  <Input
+                    id="contactName"
+                    value={editForm.contactName}
+                    onChange={(e) => setEditForm({ ...editForm, contactName: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={editForm.email}
+                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input
+                    id="phone"
+                    value={editForm.phone}
+                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="address">Address</Label>
+                  <Input
+                    id="address"
+                    value={editForm.address}
+                    onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
+                  />
+                </div>
+                <div className="border-t pt-6 space-y-4">
+                  <h4 className="text-sm font-semibold">Account Manager <span className="text-muted-foreground font-normal">(Optional)</span></h4>
+                  <div className="space-y-2">
+                    <Label htmlFor="amName">Name</Label>
+                    <Input
+                      id="amName"
                       value={editForm.accountManagerName}
                       onChange={(e) => setEditForm({ ...editForm, accountManagerName: e.target.value })}
-                      className="w-full p-2 border rounded"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-                    <input
-                      type="text"
+                  <div className="space-y-2">
+                    <Label htmlFor="amMobile">Mobile Number</Label>
+                    <Input
+                      id="amMobile"
                       value={editForm.accountManagerMobile}
                       onChange={(e) => setEditForm({ ...editForm, accountManagerMobile: e.target.value })}
-                      className="w-full p-2 border rounded"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input
+                  <div className="space-y-2">
+                    <Label htmlFor="amEmail">Email Address</Label>
+                    <Input
+                      id="amEmail"
                       type="email"
                       value={editForm.accountManagerEmail}
                       onChange={(e) => setEditForm({ ...editForm, accountManagerEmail: e.target.value })}
-                      className="w-full p-2 border rounded"
                     />
                   </div>
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="serviceNote">Service Note</Label>
+                  <Textarea
+                    id="serviceNote"
+                    value={editForm.serviceNote}
+                    onChange={(e) => setEditForm({ ...editForm, serviceNote: e.target.value })}
+                    rows={3}
+                  />
+                </div>
+                <Button type="submit">Save Changes</Button>
+              </form>
+            ) : (
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <Label className="text-muted-foreground">Contact Name</Label>
+                    <p className="mt-1">{seller.contactName || "-"}</p>
+                  </div>
+                  <div>
+                    <Label className="text-muted-foreground">Email</Label>
+                    <p className="mt-1">{seller.email || "-"}</p>
+                  </div>
+                  <div>
+                    <Label className="text-muted-foreground">Phone</Label>
+                    <p className="mt-1">{seller.phone || "-"}</p>
+                  </div>
+                  <div>
+                    <Label className="text-muted-foreground">Address</Label>
+                    <p className="mt-1">{seller.address || "-"}</p>
+                  </div>
+                </div>
+                <div className="border-t pt-6">
+                  <h4 className="text-sm font-semibold mb-4">Account Manager</h4>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <Label className="text-muted-foreground">Name</Label>
+                      <p className="mt-1">{seller.accountManagerName || "-"}</p>
+                    </div>
+                    <div>
+                      <Label className="text-muted-foreground">Mobile Number</Label>
+                      <p className="mt-1">{seller.accountManagerMobile || "-"}</p>
+                    </div>
+                    <div>
+                      <Label className="text-muted-foreground">Email Address</Label>
+                      <p className="mt-1">{seller.accountManagerEmail || "-"}</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Service Note</Label>
+                  <p className="mt-1">{seller.serviceNote || "-"}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Created</Label>
+                  <p className="mt-1">{new Date(seller.createdAt).toLocaleString()}</p>
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Service Note</label>
-                <textarea
-                  value={editForm.serviceNote}
-                  onChange={(e) => setEditForm({ ...editForm, serviceNote: e.target.value })}
-                  className="w-full p-2 border rounded"
-                  rows={3}
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Documents</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <form onSubmit={handleUpload} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="fileName">File Name</Label>
+                <Input
+                  id="fileName"
+                  value={fileName}
+                  onChange={(e) => setFileName(e.target.value)}
+                  required
                 />
               </div>
-              <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                Save Changes
-              </button>
+              <div className="space-y-2">
+                <Label htmlFor="fileUrl">File URL</Label>
+                <Input
+                  id="fileUrl"
+                  value={fileUrl}
+                  onChange={(e) => setFileUrl(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tags">Tags</Label>
+                <Input
+                  id="tags"
+                  placeholder="e.g., KYC, PAN, Compliance"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit">Upload Document</Button>
             </form>
-          ) : (
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-gray-500">Contact Name</label>
-                <p className="text-lg">{seller.contactName || "-"}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Email</label>
-                <p className="text-lg">{seller.email || "-"}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Phone</label>
-                <p className="text-lg">{seller.phone || "-"}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Address</label>
-                <p className="text-lg">{seller.address || "-"}</p>
-              </div>
-              <div className="border-t pt-4 mt-4">
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">Account Manager</h4>
+
+            {documents.length === 0 ? (
+              <p className="text-muted-foreground text-center py-8">No documents uploaded yet</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>File Name</TableHead>
+                    <TableHead>Tags</TableHead>
+                    <TableHead>Created</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {documents.map((doc) => (
+                    <TableRow key={doc.id}>
+                      {editingDocId === doc.id ? (
+                        <TableCell colSpan={4}>
+                          <div className="space-y-2">
+                            <Input
+                              value={editDocForm.fileName}
+                              onChange={(e) => setEditDocForm({ ...editDocForm, fileName: e.target.value })}
+                            />
+                            <Input
+                              value={editDocForm.fileUrl}
+                              onChange={(e) => setEditDocForm({ ...editDocForm, fileUrl: e.target.value })}
+                            />
+                            <Input
+                              value={editDocForm.tags}
+                              onChange={(e) => setEditDocForm({ ...editDocForm, tags: e.target.value })}
+                            />
+                            <div className="flex gap-2">
+                              <Button size="sm" onClick={() => handleEditDocument(doc.id)}>Save</Button>
+                              <Button size="sm" variant="outline" onClick={() => setEditingDocId(null)}>Cancel</Button>
+                            </div>
+                          </div>
+                        </TableCell>
+                      ) : (
+                        <>
+                          <TableCell className="font-medium">{doc.fileName}</TableCell>
+                          <TableCell><Badge variant="secondary">{doc.tags}</Badge></TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{new Date(doc.createdAt).toLocaleString()}</TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex gap-2 justify-end">
+                              <Button size="sm" variant="ghost" asChild>
+                                <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">View</a>
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                  setEditingDocId(doc.id);
+                                  setEditDocForm({ fileName: doc.fileName, fileUrl: doc.fileUrl, tags: doc.tags });
+                                }}
+                              >
+                                Edit
+                              </Button>
+                              <Button size="sm" variant="ghost" onClick={() => handleDeleteDocument(doc.id)}>Delete</Button>
+                            </div>
+                          </TableCell>
+                        </>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Payments</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <form onSubmit={handlePayment} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <div>
-                    <label className="text-sm font-medium text-gray-500">Name</label>
-                    <p className="text-lg">{seller.accountManagerName || "-"}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-500">Mobile Number</label>
-                    <p className="text-lg">{seller.accountManagerMobile || "-"}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-500">Email Address</label>
-                    <p className="text-lg">{seller.accountManagerEmail || "-"}</p>
-                  </div>
+                  <Label htmlFor="amount">Amount</Label>
+                  <Input
+                    id="amount"
+                    type="number"
+                    step="0.01"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="paymentDate">Payment Date</Label>
+                  <Input
+                    id="paymentDate"
+                    type="date"
+                    value={paymentDate}
+                    onChange={(e) => setPaymentDate(e.target.value)}
+                    required
+                  />
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Service Note</label>
-                <p className="text-lg">{seller.serviceNote || "-"}</p>
+              <div className="space-y-2">
+                <Label htmlFor="reference">Reference <span className="text-muted-foreground">(Optional)</span></Label>
+                <Input
+                  id="reference"
+                  value={reference}
+                  onChange={(e) => setReference(e.target.value)}
+                />
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Created</label>
-                <p className="text-lg">{new Date(seller.createdAt).toLocaleString()}</p>
+              <div className="space-y-2">
+                <Label htmlFor="proofOfPayment">Proof of Payment URL</Label>
+                <Input
+                  id="proofOfPayment"
+                  value={proofOfPayment}
+                  onChange={(e) => setProofOfPayment(e.target.value)}
+                  required
+                />
               </div>
-            </div>
-          )}
-        </div>
+              <Button type="submit">Record Payment</Button>
+            </form>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-2xl font-bold mb-4">Documents</h2>
-          <form onSubmit={handleUpload} className="mb-6 space-y-4">
-            <div>
-              <input
-                type="text"
-                placeholder="File Name"
-                value={fileName}
-                onChange={(e) => setFileName(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="File URL"
-                value={fileUrl}
-                onChange={(e) => setFileUrl(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="Tags (e.g., KYC, PAN, Compliance)"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Upload Document
-            </button>
-          </form>
-
-          <div className="space-y-2">
-            {documents.length === 0 ? (
-              <p className="text-gray-500">No documents uploaded yet</p>
+            {payments.length === 0 ? (
+              <p className="text-muted-foreground text-center py-8">No payments recorded yet</p>
             ) : (
-              documents.map((doc) => (
-                <div key={doc.id} className="border p-4 rounded">
-                  {editingDocId === doc.id ? (
-                    <div className="space-y-2">
-                      <input
-                        type="text"
-                        value={editDocForm.fileName}
-                        onChange={(e) => setEditDocForm({ ...editDocForm, fileName: e.target.value })}
-                        className="w-full p-2 border rounded"
-                      />
-                      <input
-                        type="text"
-                        value={editDocForm.fileUrl}
-                        onChange={(e) => setEditDocForm({ ...editDocForm, fileUrl: e.target.value })}
-                        className="w-full p-2 border rounded"
-                      />
-                      <input
-                        type="text"
-                        value={editDocForm.tags}
-                        onChange={(e) => setEditDocForm({ ...editDocForm, tags: e.target.value })}
-                        className="w-full p-2 border rounded"
-                      />
-                      <div className="flex gap-2">
-                        <button onClick={() => handleEditDocument(doc.id)} className="bg-blue-600 text-white px-3 py-1 rounded text-sm">
-                          Save
-                        </button>
-                        <button onClick={() => setEditingDocId(null)} className="bg-gray-400 text-white px-3 py-1 rounded text-sm">
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
+              <div className="space-y-4">
+                {payments.map((payment) => (
+                  <div key={payment.id} className="border rounded-lg p-4 space-y-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="font-medium">{doc.fileName}</p>
-                        <p className="text-sm text-gray-600">Tags: {doc.tags}</p>
-                        <p className="text-xs text-gray-400">{new Date(doc.createdAt).toLocaleString()}</p>
+                        <p className="text-2xl font-semibold">${payment.amount.toFixed(2)}</p>
+                        <p className="text-sm text-muted-foreground">Date: {new Date(payment.paymentDate).toLocaleDateString()}</p>
+                        {payment.reference && <p className="text-sm text-muted-foreground">Reference: {payment.reference}</p>}
+                        <p className="text-xs text-muted-foreground">Recorded: {new Date(payment.createdAt).toLocaleString()}</p>
                       </div>
-                      <div className="flex gap-2">
-                        <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
-                          View
-                        </a>
-                        <button
-                          onClick={() => {
-                            setEditingDocId(doc.id);
-                            setEditDocForm({ fileName: doc.fileName, fileUrl: doc.fileUrl, tags: doc.tags });
-                          }}
-                          className="text-green-600 hover:text-green-800"
-                        >
-                          Edit
-                        </button>
-                        <button onClick={() => handleDeleteDocument(doc.id)} className="text-red-600 hover:text-red-800">
-                          Delete
-                        </button>
+                      <Button size="sm" variant="outline" asChild>
+                        <a href={payment.proofOfPayment} target="_blank" rel="noopener noreferrer">View Proof</a>
+                      </Button>
+                    </div>
+                    <div className="border-t pt-4">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="font-semibold text-sm">Invoices</h4>
+                        <Button size="sm" onClick={() => generateInvoice(payment.id)}>
+                          Generate Invoice
+                        </Button>
                       </div>
+                      {invoices[payment.id]?.length > 0 ? (
+                        <div className="space-y-2">
+                          {invoices[payment.id].map((invoice) => (
+                            <div key={invoice.id} className="bg-muted p-3 rounded text-sm flex justify-between items-center">
+                              <div>
+                                <p className="font-medium">{invoice.invoiceNumber}</p>
+                                <p className="text-xs text-muted-foreground">{new Date(invoice.createdAt).toLocaleString()}</p>
+                              </div>
+                              {invoice.pdfUrl && (
+                                <Button size="sm" variant="ghost" asChild>
+                                  <a href={invoice.pdfUrl}>Download PDF</a>
+                                </Button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">No invoices generated</p>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6 mt-6">
-          <h2 className="text-2xl font-bold mb-4">Payments</h2>
-          <form onSubmit={handlePayment} className="mb-6 space-y-4">
-            <div>
-              <input
-                type="number"
-                step="0.01"
-                placeholder="Amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="date"
-                placeholder="Payment Date"
-                value={paymentDate}
-                onChange={(e) => setPaymentDate(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="Reference (optional)"
-                value={reference}
-                onChange={(e) => setReference(e.target.value)}
-                className="w-full p-2 border rounded"
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="Proof of Payment URL"
-                value={proofOfPayment}
-                onChange={(e) => setProofOfPayment(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Record Payment
-            </button>
-          </form>
-
-          <div className="space-y-2">
-            {payments.length === 0 ? (
-              <p className="text-gray-500">No payments recorded yet</p>
-            ) : (
-              payments.map((payment) => (
-                <div key={payment.id} className="border p-4 rounded">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-medium text-lg">${payment.amount.toFixed(2)}</p>
-                      <p className="text-sm text-gray-600">Date: {new Date(payment.paymentDate).toLocaleDateString()}</p>
-                      {payment.reference && <p className="text-sm text-gray-600">Reference: {payment.reference}</p>}
-                      <p className="text-xs text-gray-400">Recorded: {new Date(payment.createdAt).toLocaleString()}</p>
-                    </div>
-                    <a href={payment.proofOfPayment} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
-                      View Proof
-                    </a>
                   </div>
-                  <div className="mt-4 border-t pt-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className="font-semibold">Invoices</h4>
-                      <button
-                        onClick={() => generateInvoice(payment.id)}
-                        className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
-                      >
-                        Generate Invoice
-                      </button>
-                    </div>
-                    {invoices[payment.id]?.length > 0 ? (
-                      <div className="space-y-2">
-                        {invoices[payment.id].map((invoice) => (
-                          <div key={invoice.id} className="bg-gray-50 p-2 rounded text-sm">
-                            <p className="font-medium">{invoice.invoiceNumber}</p>
-                            <p className="text-xs text-gray-500">{new Date(invoice.createdAt).toLocaleString()}</p>
-                            {invoice.pdfUrl && (
-                              <a href={invoice.pdfUrl} className="text-blue-600 hover:text-blue-800 text-xs">
-                                Download PDF
-                              </a>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500">No invoices generated</p>
-                    )}
-                  </div>
-                </div>
-              ))
+                ))}
+              </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-white rounded-lg shadow p-6 mt-6">
-          <h2 className="text-2xl font-bold mb-4">Proposals</h2>
-          <form onSubmit={handleAddProposal} className="mb-6 space-y-4">
-            <div>
-              <input
-                type="text"
-                placeholder="Proposal file name"
-                value={proposalFileName}
-                onChange={(e) => setProposalFileName(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="Proposal file URL"
-                value={proposalFileUrl}
-                onChange={(e) => setProposalFileUrl(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="shareable"
-                checked={proposalShareable}
-                onChange={(e) => setProposalShareable(e.target.checked)}
-                className="mr-2"
-              />
-              <label htmlFor="shareable">Mark as shareable</label>
-            </div>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Upload Proposal
-            </button>
-          </form>
-          <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Proposals</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <form onSubmit={handleAddProposal} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="proposalFileName">Proposal File Name</Label>
+                <Input
+                  id="proposalFileName"
+                  value={proposalFileName}
+                  onChange={(e) => setProposalFileName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="proposalFileUrl">Proposal File URL</Label>
+                <Input
+                  id="proposalFileUrl"
+                  value={proposalFileUrl}
+                  onChange={(e) => setProposalFileUrl(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="shareable"
+                  checked={proposalShareable}
+                  onChange={(e) => setProposalShareable(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                <Label htmlFor="shareable" className="cursor-pointer">Mark as shareable</Label>
+              </div>
+              <Button type="submit">Upload Proposal</Button>
+            </form>
             {proposals.length === 0 ? (
-              <p className="text-gray-500">No proposals yet</p>
+              <p className="text-muted-foreground text-center py-8">No proposals yet</p>
             ) : (
-              proposals.map((proposal) => (
-                <div key={proposal.id} className="border rounded p-4 bg-gray-50">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-semibold">{proposal.fileName}</p>
-                      <a href={proposal.fileUrl} className="text-blue-600 hover:text-blue-800 text-sm">
-                        View Proposal
-                      </a>
-                      <p className="text-sm mt-1">
-                        <span className={proposal.shareable ? "text-green-600" : "text-gray-600"}>
-                          {proposal.shareable ? "Shareable" : "Internal Only"}
-                        </span>
-                      </p>
+              <div className="space-y-3">
+                {proposals.map((proposal) => (
+                  <div key={proposal.id} className="border rounded-lg p-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-semibold">{proposal.fileName}</p>
+                        <Button size="sm" variant="link" className="p-0 h-auto" asChild>
+                          <a href={proposal.fileUrl}>View Proposal</a>
+                        </Button>
+                        <div className="mt-2">
+                          <Badge variant={proposal.shareable ? "default" : "secondary"}>
+                            {proposal.shareable ? "Shareable" : "Internal Only"}
+                          </Badge>
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{new Date(proposal.createdAt).toLocaleString()}</p>
                     </div>
-                    <p className="text-xs text-gray-500">{new Date(proposal.createdAt).toLocaleString()}</p>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-white rounded-lg shadow p-6 mt-6">
-          <h2 className="text-2xl font-bold mb-4">Lifecycle Tracking</h2>
-          <form onSubmit={handleUpdateLifecycle} className="mb-6 space-y-4">
-            <div>
-              <input
-                type="text"
-                placeholder="Marketplace (e.g., Amazon, Flipkart)"
-                value={marketplace}
-                onChange={(e) => setMarketplace(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="Stage (e.g., Onboarding, Active, Suspended)"
-                value={stage}
-                onChange={(e) => setStage(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Update Lifecycle
-            </button>
-          </form>
-          <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Lifecycle Tracking</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <form onSubmit={handleUpdateLifecycle} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="marketplace">Marketplace</Label>
+                <Input
+                  id="marketplace"
+                  placeholder="e.g., Amazon, Flipkart"
+                  value={marketplace}
+                  onChange={(e) => setMarketplace(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="stage">Stage</Label>
+                <Input
+                  id="stage"
+                  placeholder="e.g., Onboarding, Active, Suspended"
+                  value={stage}
+                  onChange={(e) => setStage(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit">Update Lifecycle</Button>
+            </form>
             {lifecycleHistory.length === 0 ? (
-              <p className="text-gray-500">No lifecycle history yet</p>
+              <p className="text-muted-foreground text-center py-8">No lifecycle history yet</p>
             ) : (
-              lifecycleHistory.map((entry) => (
-                <div key={entry.id} className="border rounded p-4 bg-gray-50">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-semibold">{entry.marketplace}</p>
-                      <p className="text-sm text-gray-600">Stage: {entry.stage}</p>
+              <div className="space-y-3">
+                {lifecycleHistory.map((entry) => (
+                  <div key={entry.id} className="border rounded-lg p-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-semibold">{entry.marketplace}</p>
+                        <p className="text-sm text-muted-foreground">Stage: {entry.stage}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{new Date(entry.createdAt).toLocaleString()}</p>
                     </div>
-                    <p className="text-xs text-gray-500">{new Date(entry.createdAt).toLocaleString()}</p>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-white rounded-lg shadow p-6 mt-6">
-          <h2 className="text-2xl font-bold mb-4">Internal Notes</h2>
-          <form onSubmit={handleAddNote} className="mb-6 space-y-4">
-            <div>
-              <textarea
-                placeholder="Note content"
-                value={noteContent}
-                onChange={(e) => setNoteContent(e.target.value)}
-                className="w-full p-2 border rounded"
-                rows={4}
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="Attachment URL (optional)"
-                value={noteAttachment}
-                onChange={(e) => setNoteAttachment(e.target.value)}
-                className="w-full p-2 border rounded"
-              />
-            </div>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Add Note
-            </button>
-          </form>
-          <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Internal Notes</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <form onSubmit={handleAddNote} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="noteContent">Note Content</Label>
+                <Textarea
+                  id="noteContent"
+                  value={noteContent}
+                  onChange={(e) => setNoteContent(e.target.value)}
+                  rows={4}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="noteAttachment">Attachment URL <span className="text-muted-foreground">(Optional)</span></Label>
+                <Input
+                  id="noteAttachment"
+                  value={noteAttachment}
+                  onChange={(e) => setNoteAttachment(e.target.value)}
+                />
+              </div>
+              <Button type="submit">Add Note</Button>
+            </form>
             {internalNotes.length === 0 ? (
-              <p className="text-gray-500">No internal notes yet</p>
+              <p className="text-muted-foreground text-center py-8">No internal notes yet</p>
             ) : (
-              internalNotes.map((note) => (
-                <div key={note.id} className="border rounded p-4 bg-gray-50">
-                  <p className="mb-2">{note.content}</p>
-                  {note.attachmentUrl && (
-                    <a href={note.attachmentUrl} className="text-blue-600 hover:text-blue-800 text-sm">
-                      View Attachment
-                    </a>
-                  )}
-                  <p className="text-xs text-gray-500 mt-2">{new Date(note.createdAt).toLocaleString()}</p>
-                </div>
-              ))
+              <div className="space-y-3">
+                {internalNotes.map((note) => (
+                  <div key={note.id} className="border rounded-lg p-4 bg-muted/50">
+                    <p className="mb-2">{note.content}</p>
+                    {note.attachmentUrl && (
+                      <Button size="sm" variant="link" className="p-0 h-auto" asChild>
+                        <a href={note.attachmentUrl}>View Attachment</a>
+                      </Button>
+                    )}
+                    <p className="text-xs text-muted-foreground mt-2">{new Date(note.createdAt).toLocaleString()}</p>
+                  </div>
+                ))}
+              </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
