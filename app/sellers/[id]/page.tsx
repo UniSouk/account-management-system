@@ -10,7 +10,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { AppLayout } from "@/components/app-layout";
 
 type Seller = {
@@ -73,14 +80,20 @@ type LifecycleHistory = {
   createdAt: string;
 };
 
-export default function SellerProfilePage({ params }: { params: Promise<{ id: string }> }) {
+export default function SellerProfilePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const [seller, setSeller] = useState<Seller | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [invoices, setInvoices] = useState<Record<string, Invoice[]>>({});
   const [internalNotes, setInternalNotes] = useState<InternalNote[]>([]);
   const [proposals, setProposals] = useState<Proposal[]>([]);
-  const [lifecycleHistory, setLifecycleHistory] = useState<LifecycleHistory[]>([]);
+  const [lifecycleHistory, setLifecycleHistory] = useState<LifecycleHistory[]>(
+    [],
+  );
   const [id, setId] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -109,7 +122,11 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   const [marketplace, setMarketplace] = useState("");
   const [stage, setStage] = useState("");
   const [editingDocId, setEditingDocId] = useState<string | null>(null);
-  const [editDocForm, setEditDocForm] = useState({ fileName: "", fileUrl: "", tags: "" });
+  const [editDocForm, setEditDocForm] = useState({
+    fileName: "",
+    fileUrl: "",
+    tags: "",
+  });
   const router = useRouter();
 
   useEffect(() => {
@@ -281,7 +298,10 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     const res = await fetch(`/api/sellers/${id}/notes`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: noteContent, attachmentUrl: noteAttachment || null }),
+      body: JSON.stringify({
+        content: noteContent,
+        attachmentUrl: noteAttachment || null,
+      }),
     });
     if (res.ok) {
       setNoteContent("");
@@ -296,7 +316,11 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     const res = await fetch(`/api/sellers/${id}/proposals`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fileName: proposalFileName, fileUrl: proposalFileUrl, shareable: proposalShareable }),
+      body: JSON.stringify({
+        fileName: proposalFileName,
+        fileUrl: proposalFileUrl,
+        shareable: proposalShareable,
+      }),
     });
     if (res.ok) {
       setProposalFileName("");
@@ -322,21 +346,24 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     }
   };
 
-  if (!seller) return (
-    <AppLayout>
-      <div className="space-y-6 p-8">
-        <Skeleton className="h-10 w-32" />
-        <Card>
-          <CardHeader><Skeleton className="h-6 w-48" /></CardHeader>
-          <CardContent className="space-y-4">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
-          </CardContent>
-        </Card>
-      </div>
-    </AppLayout>
-  );
+  if (!seller)
+    return (
+      <AppLayout>
+        <div className="space-y-6 p-8">
+          <Skeleton className="h-10 w-32" />
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-48" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </CardContent>
+          </Card>
+        </div>
+      </AppLayout>
+    );
 
   return (
     <AppLayout>
@@ -362,7 +389,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   <Input
                     id="businessName"
                     value={editForm.businessName}
-                    onChange={(e) => setEditForm({ ...editForm, businessName: e.target.value })}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, businessName: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -371,7 +400,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   <Input
                     id="contactName"
                     value={editForm.contactName}
-                    onChange={(e) => setEditForm({ ...editForm, contactName: e.target.value })}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, contactName: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -380,7 +411,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                     id="email"
                     type="email"
                     value={editForm.email}
-                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, email: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -388,7 +421,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   <Input
                     id="phone"
                     value={editForm.phone}
-                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, phone: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -396,17 +431,29 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   <Input
                     id="address"
                     value={editForm.address}
-                    onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, address: e.target.value })
+                    }
                   />
                 </div>
                 <div className="border-t pt-6 space-y-4">
-                  <h4 className="text-sm font-semibold">Account Manager <span className="text-muted-foreground font-normal">(Optional)</span></h4>
+                  <h4 className="text-sm font-semibold">
+                    Account Manager{" "}
+                    <span className="text-muted-foreground font-normal">
+                      (Optional)
+                    </span>
+                  </h4>
                   <div className="space-y-2">
                     <Label htmlFor="amName">Name</Label>
                     <Input
                       id="amName"
                       value={editForm.accountManagerName}
-                      onChange={(e) => setEditForm({ ...editForm, accountManagerName: e.target.value })}
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          accountManagerName: e.target.value,
+                        })
+                      }
                     />
                   </div>
                   <div className="space-y-2">
@@ -414,7 +461,12 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                     <Input
                       id="amMobile"
                       value={editForm.accountManagerMobile}
-                      onChange={(e) => setEditForm({ ...editForm, accountManagerMobile: e.target.value })}
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          accountManagerMobile: e.target.value,
+                        })
+                      }
                     />
                   </div>
                   <div className="space-y-2">
@@ -423,7 +475,12 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                       id="amEmail"
                       type="email"
                       value={editForm.accountManagerEmail}
-                      onChange={(e) => setEditForm({ ...editForm, accountManagerEmail: e.target.value })}
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          accountManagerEmail: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -432,7 +489,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   <Textarea
                     id="serviceNote"
                     value={editForm.serviceNote}
-                    onChange={(e) => setEditForm({ ...editForm, serviceNote: e.target.value })}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, serviceNote: e.target.value })
+                    }
                     rows={3}
                   />
                 </div>
@@ -442,7 +501,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <Label className="text-muted-foreground">Contact Name</Label>
+                    <Label className="text-muted-foreground">
+                      Contact Name
+                    </Label>
                     <p className="mt-1">{seller.contactName || "-"}</p>
                   </div>
                   <div>
@@ -459,19 +520,29 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   </div>
                 </div>
                 <div className="border-t pt-6">
-                  <h4 className="text-sm font-semibold mb-4">Account Manager</h4>
+                  <h4 className="text-sm font-semibold mb-4">
+                    Account Manager
+                  </h4>
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <Label className="text-muted-foreground">Name</Label>
                       <p className="mt-1">{seller.accountManagerName || "-"}</p>
                     </div>
                     <div>
-                      <Label className="text-muted-foreground">Mobile Number</Label>
-                      <p className="mt-1">{seller.accountManagerMobile || "-"}</p>
+                      <Label className="text-muted-foreground">
+                        Mobile Number
+                      </Label>
+                      <p className="mt-1">
+                        {seller.accountManagerMobile || "-"}
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-muted-foreground">Email Address</Label>
-                      <p className="mt-1">{seller.accountManagerEmail || "-"}</p>
+                      <Label className="text-muted-foreground">
+                        Email Address
+                      </Label>
+                      <p className="mt-1">
+                        {seller.accountManagerEmail || "-"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -481,7 +552,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 </div>
                 <div>
                   <Label className="text-muted-foreground">Created</Label>
-                  <p className="mt-1">{new Date(seller.createdAt).toLocaleString()}</p>
+                  <p className="mt-1">
+                    {new Date(seller.createdAt).toLocaleString()}
+                  </p>
                 </div>
               </div>
             )}
@@ -526,7 +599,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             </form>
 
             {documents.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">No documents uploaded yet</p>
+              <p className="text-muted-foreground text-center py-8">
+                No documents uploaded yet
+              </p>
             ) : (
               <Table>
                 <TableHeader>
@@ -545,43 +620,91 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                           <div className="space-y-2">
                             <Input
                               value={editDocForm.fileName}
-                              onChange={(e) => setEditDocForm({ ...editDocForm, fileName: e.target.value })}
+                              onChange={(e) =>
+                                setEditDocForm({
+                                  ...editDocForm,
+                                  fileName: e.target.value,
+                                })
+                              }
                             />
                             <Input
                               value={editDocForm.fileUrl}
-                              onChange={(e) => setEditDocForm({ ...editDocForm, fileUrl: e.target.value })}
+                              onChange={(e) =>
+                                setEditDocForm({
+                                  ...editDocForm,
+                                  fileUrl: e.target.value,
+                                })
+                              }
                             />
                             <Input
                               value={editDocForm.tags}
-                              onChange={(e) => setEditDocForm({ ...editDocForm, tags: e.target.value })}
+                              onChange={(e) =>
+                                setEditDocForm({
+                                  ...editDocForm,
+                                  tags: e.target.value,
+                                })
+                              }
                             />
                             <div className="flex gap-2">
-                              <Button size="sm" onClick={() => handleEditDocument(doc.id)}>Save</Button>
-                              <Button size="sm" variant="outline" onClick={() => setEditingDocId(null)}>Cancel</Button>
+                              <Button
+                                size="sm"
+                                onClick={() => handleEditDocument(doc.id)}
+                              >
+                                Save
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setEditingDocId(null)}
+                              >
+                                Cancel
+                              </Button>
                             </div>
                           </div>
                         </TableCell>
                       ) : (
                         <>
-                          <TableCell className="font-medium">{doc.fileName}</TableCell>
-                          <TableCell><Badge variant="secondary">{doc.tags}</Badge></TableCell>
-                          <TableCell className="text-sm text-muted-foreground">{new Date(doc.createdAt).toLocaleString()}</TableCell>
+                          <TableCell className="font-medium">
+                            {doc.fileName}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="secondary">{doc.tags}</Badge>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {new Date(doc.createdAt).toLocaleString()}
+                          </TableCell>
                           <TableCell className="text-right">
                             <div className="flex gap-2 justify-end">
                               <Button size="sm" variant="ghost" asChild>
-                                <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">View</a>
+                                <a
+                                  href={doc.fileUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  View
+                                </a>
                               </Button>
                               <Button
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => {
                                   setEditingDocId(doc.id);
-                                  setEditDocForm({ fileName: doc.fileName, fileUrl: doc.fileUrl, tags: doc.tags });
+                                  setEditDocForm({
+                                    fileName: doc.fileName,
+                                    fileUrl: doc.fileUrl,
+                                    tags: doc.tags,
+                                  });
                                 }}
                               >
                                 Edit
                               </Button>
-                              <Button size="sm" variant="ghost" onClick={() => handleDeleteDocument(doc.id)}>Delete</Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleDeleteDocument(doc.id)}
+                              >
+                                Delete
+                              </Button>
                             </div>
                           </TableCell>
                         </>
@@ -624,7 +747,10 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="reference">Reference <span className="text-muted-foreground">(Optional)</span></Label>
+                <Label htmlFor="reference">
+                  Reference{" "}
+                  <span className="text-muted-foreground">(Optional)</span>
+                </Label>
                 <Input
                   id="reference"
                   value={reference}
@@ -644,47 +770,85 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             </form>
 
             {payments.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">No payments recorded yet</p>
+              <p className="text-muted-foreground text-center py-8">
+                No payments recorded yet
+              </p>
             ) : (
               <div className="space-y-4">
                 {payments.map((payment) => (
-                  <div key={payment.id} className="border rounded-lg p-4 space-y-4">
+                  <div
+                    key={payment.id}
+                    className="border rounded-lg p-4 space-y-4"
+                  >
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="text-2xl font-semibold">${payment.amount.toFixed(2)}</p>
-                        <p className="text-sm text-muted-foreground">Date: {new Date(payment.paymentDate).toLocaleDateString()}</p>
-                        {payment.reference && <p className="text-sm text-muted-foreground">Reference: {payment.reference}</p>}
-                        <p className="text-xs text-muted-foreground">Recorded: {new Date(payment.createdAt).toLocaleString()}</p>
+                        <p className="text-2xl font-semibold">
+                          ${payment.amount.toFixed(2)}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Date:{" "}
+                          {new Date(payment.paymentDate).toLocaleDateString()}
+                        </p>
+                        {payment.reference && (
+                          <p className="text-sm text-muted-foreground">
+                            Reference: {payment.reference}
+                          </p>
+                        )}
+                        <p className="text-xs text-muted-foreground">
+                          Recorded:{" "}
+                          {new Date(payment.createdAt).toLocaleString()}
+                        </p>
                       </div>
                       <Button size="sm" variant="outline" asChild>
-                        <a href={payment.proofOfPayment} target="_blank" rel="noopener noreferrer">View Proof</a>
+                        <a
+                          href={payment.proofOfPayment}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View Proof
+                        </a>
                       </Button>
                     </div>
                     <div className="border-t pt-4">
                       <div className="flex justify-between items-center mb-3">
                         <h4 className="font-semibold text-sm">Invoices</h4>
-                        <Button size="sm" onClick={() => generateInvoice(payment.id)}>
+                        <Button
+                          size="sm"
+                          onClick={() => generateInvoice(payment.id)}
+                        >
                           Generate Invoice
                         </Button>
                       </div>
                       {invoices[payment.id]?.length > 0 ? (
                         <div className="space-y-2">
                           {invoices[payment.id].map((invoice) => (
-                            <div key={invoice.id} className="bg-muted p-3 rounded text-sm flex justify-between items-center">
+                            <div
+                              key={invoice.id}
+                              className="bg-muted p-3 rounded text-sm flex justify-between items-center"
+                            >
                               <div>
-                                <p className="font-medium">{invoice.invoiceNumber}</p>
-                                <p className="text-xs text-muted-foreground">{new Date(invoice.createdAt).toLocaleString()}</p>
+                                <p className="font-medium">
+                                  {invoice.invoiceNumber}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {new Date(invoice.createdAt).toLocaleString()}
+                                </p>
                               </div>
-                              {invoice.pdfUrl && (
-                                <Button size="sm" variant="ghost" asChild>
-                                  <a href={invoice.pdfUrl}>Download PDF</a>
-                                </Button>
-                              )}
+                              <Button size="sm" variant="ghost" asChild>
+                                <a
+                                  href={`/api/invoices/${invoice.id}/download`}
+                                  download
+                                >
+                                  Download Invoice
+                                </a>
+                              </Button>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <p className="text-sm text-muted-foreground">No invoices generated</p>
+                        <p className="text-sm text-muted-foreground">
+                          No invoices generated
+                        </p>
                       )}
                     </div>
                   </div>
@@ -726,12 +890,16 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   onChange={(e) => setProposalShareable(e.target.checked)}
                   className="h-4 w-4"
                 />
-                <Label htmlFor="shareable" className="cursor-pointer">Mark as shareable</Label>
+                <Label htmlFor="shareable" className="cursor-pointer">
+                  Mark as shareable
+                </Label>
               </div>
               <Button type="submit">Upload Proposal</Button>
             </form>
             {proposals.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">No proposals yet</p>
+              <p className="text-muted-foreground text-center py-8">
+                No proposals yet
+              </p>
             ) : (
               <div className="space-y-3">
                 {proposals.map((proposal) => (
@@ -739,16 +907,27 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                     <div className="flex justify-between items-start">
                       <div>
                         <p className="font-semibold">{proposal.fileName}</p>
-                        <Button size="sm" variant="link" className="p-0 h-auto" asChild>
+                        <Button
+                          size="sm"
+                          variant="link"
+                          className="p-0 h-auto"
+                          asChild
+                        >
                           <a href={proposal.fileUrl}>View Proposal</a>
                         </Button>
                         <div className="mt-2">
-                          <Badge variant={proposal.shareable ? "default" : "secondary"}>
+                          <Badge
+                            variant={
+                              proposal.shareable ? "default" : "secondary"
+                            }
+                          >
                             {proposal.shareable ? "Shareable" : "Internal Only"}
                           </Badge>
                         </div>
                       </div>
-                      <p className="text-xs text-muted-foreground">{new Date(proposal.createdAt).toLocaleString()}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(proposal.createdAt).toLocaleString()}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -786,7 +965,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               <Button type="submit">Update Lifecycle</Button>
             </form>
             {lifecycleHistory.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">No lifecycle history yet</p>
+              <p className="text-muted-foreground text-center py-8">
+                No lifecycle history yet
+              </p>
             ) : (
               <div className="space-y-3">
                 {lifecycleHistory.map((entry) => (
@@ -794,9 +975,13 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                     <div className="flex justify-between items-start">
                       <div>
                         <p className="font-semibold">{entry.marketplace}</p>
-                        <p className="text-sm text-muted-foreground">Stage: {entry.stage}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Stage: {entry.stage}
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground">{new Date(entry.createdAt).toLocaleString()}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(entry.createdAt).toLocaleString()}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -822,7 +1007,10 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="noteAttachment">Attachment URL <span className="text-muted-foreground">(Optional)</span></Label>
+                <Label htmlFor="noteAttachment">
+                  Attachment URL{" "}
+                  <span className="text-muted-foreground">(Optional)</span>
+                </Label>
                 <Input
                   id="noteAttachment"
                   value={noteAttachment}
@@ -832,18 +1020,30 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               <Button type="submit">Add Note</Button>
             </form>
             {internalNotes.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">No internal notes yet</p>
+              <p className="text-muted-foreground text-center py-8">
+                No internal notes yet
+              </p>
             ) : (
               <div className="space-y-3">
                 {internalNotes.map((note) => (
-                  <div key={note.id} className="border rounded-lg p-4 bg-muted/50">
+                  <div
+                    key={note.id}
+                    className="border rounded-lg p-4 bg-muted/50"
+                  >
                     <p className="mb-2">{note.content}</p>
                     {note.attachmentUrl && (
-                      <Button size="sm" variant="link" className="p-0 h-auto" asChild>
+                      <Button
+                        size="sm"
+                        variant="link"
+                        className="p-0 h-auto"
+                        asChild
+                      >
                         <a href={note.attachmentUrl}>View Attachment</a>
                       </Button>
                     )}
-                    <p className="text-xs text-muted-foreground mt-2">{new Date(note.createdAt).toLocaleString()}</p>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {new Date(note.createdAt).toLocaleString()}
+                    </p>
                   </div>
                 ))}
               </div>

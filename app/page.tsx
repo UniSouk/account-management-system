@@ -29,7 +29,7 @@ export default async function Home() {
               <p className="text-muted-foreground mb-4">
                 View, create, and manage seller accounts and their information.
               </p>
-              <Button asChild>
+              <Button variant="secondary" asChild>
                 <Link href="/sellers">Go to Sellers</Link>
               </Button>
             </CardContent>
