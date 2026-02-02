@@ -2,24 +2,26 @@ import { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "./prisma";
-import { createHash } from "crypto";
+import bcrypt from "bcryptjs";
 
-// Simple hash function for password comparison
-function hashPassword(password: string): string {
-  return createHash("sha256")
-    .update(password + process.env.NEXTAUTH_SECRET)
-    .digest("hex");
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 12);
 }
 
 export async function verifyPassword(
   password: string,
   hashedPassword: string,
 ): Promise<boolean> {
-  return hashPassword(password) === hashedPassword;
+  return bcrypt.compare(password, hashedPassword);
 }
 
-export async function createPasswordHash(password: string): Promise<string> {
-  return hashPassword(password);
+export function generatePassword(length = 12): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
 }
 
 export const authOptions: NextAuthOptions = {

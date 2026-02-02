@@ -69,6 +69,17 @@ export const createLifecycleSchema = z.object({
   stage: z.string().min(1, "Stage is required").max(100),
 });
 
+// User management schemas
+export const createUserSchema = z.object({
+  email: z.string().email("Invalid email"),
+  name: z.string().min(1, "Name is required").max(255),
+});
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "Current password is required"),
+  newPassword: z.string().min(8, "Password must be at least 8 characters"),
+});
+
 // Helper to validate and return typed data or error response
 export function validateBody<T>(
   schema: z.ZodSchema<T>,

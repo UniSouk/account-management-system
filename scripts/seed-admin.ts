@@ -8,10 +8,11 @@
  * - ADMIN_NAME: Admin name (default: Admin User)
  */
 
+import "dotenv/config";
 import { PrismaClient } from "../app/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
-import { createHash } from "crypto";
+import bcrypt from "bcryptjs";
 
 async function main() {
   const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
@@ -27,9 +28,7 @@ async function main() {
     process.exit(1);
   }
 
-  const passwordHash = createHash("sha256")
-    .update(password + process.env.NEXTAUTH_SECRET)
-    .digest("hex");
+  const passwordHash = await bcrypt.hash(password, 12);
 
   // Create or update user
   const user = await prisma.user.upsert({
@@ -38,7 +37,7 @@ async function main() {
     create: { email, name, role: "Admin" },
   });
 
-  // Create or update credentials account (using refresh_token to store password hash)
+  // Create or update credentials account
   await prisma.account.upsert({
     where: {
       provider_providerAccountId: {

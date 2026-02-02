@@ -2,13 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { LogOut, Settings, Users, Key } from "lucide-react";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
-  const isActive = (path: string) => pathname === path || pathname.startsWith(path + "/");
+  const isActive = (path: string) =>
+    pathname === path || pathname.startsWith(path + "/");
+
+  const isAdmin = session?.user?.role === "Admin";
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -26,13 +38,58 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 >
                   <Link href="/sellers">Sellers</Link>
                 </Button>
-                <Button
-                  variant={isActive("/audit-logs") ? "secondary" : "ghost"}
-                  asChild
-                >
-                  <Link href="/audit-logs">Audit Logs</Link>
-                </Button>
+                {isAdmin && (
+                  <>
+                    <Button
+                      variant={isActive("/users") ? "secondary" : "ghost"}
+                      asChild
+                    >
+                      <Link href="/users">
+                        <Users className="w-4 h-4 mr-2" />
+                        Users
+                      </Link>
+                    </Button>
+                    <Button
+                      variant={isActive("/audit-logs") ? "secondary" : "ghost"}
+                      asChild
+                    >
+                      <Link href="/audit-logs">Audit Logs</Link>
+                    </Button>
+                  </>
+                )}
               </nav>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600">
+                {session?.user?.name || session?.user?.email}
+              </span>
+              <Select
+                onValueChange={(value) => {
+                  if (value === "logout") {
+                    signOut({ callbackUrl: "/login" });
+                  } else if (value === "password") {
+                    window.location.href = "/settings/password";
+                  }
+                }}
+              >
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Account" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="password">
+                    <div className="flex items-center">
+                      <Key className="w-4 h-4 mr-2" />
+                      Change Password
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="logout">
+                    <div className="flex items-center text-red-600">
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Logout
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>

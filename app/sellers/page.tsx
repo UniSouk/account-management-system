@@ -10,7 +10,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { AppLayout } from "@/components/app-layout";
 import {
   Form,
@@ -43,7 +50,11 @@ const sellerSchema = z.object({
   address: z.string().optional(),
   accountManagerName: z.string().optional(),
   accountManagerMobile: z.string().optional(),
-  accountManagerEmail: z.string().email("Invalid email").optional().or(z.literal("")),
+  accountManagerEmail: z
+    .string()
+    .email("Invalid email")
+    .optional()
+    .or(z.literal("")),
   serviceNote: z.string().optional(),
 });
 
@@ -100,7 +111,10 @@ export default function SellersPage() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-semibold">Sellers</h1>
-          <Button onClick={() => setShowForm(!showForm)} variant={showForm ? "outline" : "default"}>
+          <Button
+            onClick={() => setShowForm(!showForm)}
+            variant={showForm ? "outline" : "default"}
+          >
             {showForm ? "Cancel" : "Add Seller"}
           </Button>
         </div>
@@ -112,7 +126,10 @@ export default function SellersPage() {
             </CardHeader>
             <CardContent>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6"
+                >
                   <FormField
                     control={form.control}
                     name="businessName"
@@ -179,7 +196,12 @@ export default function SellersPage() {
                     )}
                   />
                   <div className="border-t pt-6 space-y-4">
-                    <h4 className="text-sm font-semibold">Account Manager <span className="text-muted-foreground font-normal">(Optional)</span></h4>
+                    <h4 className="text-sm font-semibold">
+                      Point Of Contact{" "}
+                      <span className="text-muted-foreground font-normal">
+                        (Optional)
+                      </span>
+                    </h4>
                     <FormField
                       control={form.control}
                       name="accountManagerName"
@@ -254,19 +276,28 @@ export default function SellersPage() {
             <TableBody>
               {sellers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-12 text-muted-foreground">
+                  <TableCell
+                    colSpan={5}
+                    className="text-center py-12 text-muted-foreground"
+                  >
                     No sellers yet. Click "Add Seller" to create one.
                   </TableCell>
                 </TableRow>
               ) : (
                 sellers.map((seller) => (
                   <TableRow key={seller.id}>
-                    <TableCell className="font-medium">{seller.businessName}</TableCell>
+                    <TableCell className="font-medium">
+                      {seller.businessName}
+                    </TableCell>
                     <TableCell>{seller.contactName || "-"}</TableCell>
                     <TableCell>{seller.email || "-"}</TableCell>
                     <TableCell>{seller.phone || "-"}</TableCell>
                     <TableCell>
-                      <Button variant="link" onClick={() => router.push(`/sellers/${seller.id}`)} className="p-0 h-auto">
+                      <Button
+                        variant="link"
+                        onClick={() => router.push(`/sellers/${seller.id}`)}
+                        className="p-0 h-auto"
+                      >
                         View
                       </Button>
                     </TableCell>
