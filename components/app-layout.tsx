@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { LogOut, Settings, Users, Key } from "lucide-react";
+import { LogOut, Users, Key, Store, ScrollText, User } from "lucide-react";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -36,7 +36,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   variant={isActive("/sellers") ? "secondary" : "ghost"}
                   asChild
                 >
-                  <Link href="/sellers">Sellers</Link>
+                  <Link href="/sellers">
+                    <Store className="w-4 h-4 mr-2" />
+                    Sellers
+                  </Link>
                 </Button>
                 {isAdmin && (
                   <>
@@ -53,16 +56,20 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                       variant={isActive("/audit-logs") ? "secondary" : "ghost"}
                       asChild
                     >
-                      <Link href="/audit-logs">Audit Logs</Link>
+                      <Link href="/audit-logs">
+                        <ScrollText className="w-4 h-4 mr-2" />
+                        Audit Logs
+                      </Link>
                     </Button>
                   </>
                 )}
               </nav>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <User className="w-4 h-4" />
                 {session?.user?.name || session?.user?.email}
-              </span>
+              </div>
               <Select
                 onValueChange={(value) => {
                   if (value === "logout") {
@@ -72,7 +79,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   }
                 }}
               >
-                <SelectTrigger className="w-[140px]">
+                <SelectTrigger className="w-[160px]">
                   <SelectValue placeholder="Account" />
                 </SelectTrigger>
                 <SelectContent>

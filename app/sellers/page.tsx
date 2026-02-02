@@ -80,10 +80,6 @@ export default function SellersPage() {
     },
   });
 
-  useEffect(() => {
-    fetchSellers();
-  }, []);
-
   const fetchSellers = async () => {
     const res = await fetch("/api/sellers");
     if (res.ok) {
@@ -91,6 +87,24 @@ export default function SellersPage() {
       setSellers(data);
     }
   };
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadSellers = async () => {
+      const res = await fetch("/api/sellers");
+      if (res.ok && mounted) {
+        const data = await res.json();
+        setSellers(data);
+      }
+    };
+
+    loadSellers();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const onSubmit = async (data: SellerFormValues) => {
     const res = await fetch("/api/sellers", {
@@ -280,7 +294,7 @@ export default function SellersPage() {
                     colSpan={5}
                     className="text-center py-12 text-muted-foreground"
                   >
-                    No sellers yet. Click "Add Seller" to create one.
+                    No sellers yet. Click &quot;Add Seller&quot; to create one.
                   </TableCell>
                 </TableRow>
               ) : (
