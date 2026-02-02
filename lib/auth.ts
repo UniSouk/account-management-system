@@ -1,30 +1,71 @@
 import { NextAuthOptions } from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
+import prisma from "./prisma";
+import { createHash } from "crypto";
+
+// Simple hash function for password comparison
+function hashPassword(password: string): string {
+  return createHash("sha256")
+    .update(password + process.env.NEXTAUTH_SECRET)
+    .digest("hex");
+}
+
+export async function verifyPassword(
+  password: string,
+  hashedPassword: string,
+): Promise<boolean> {
+  return hashPassword(password) === hashedPassword;
+}
+
+export async function createPasswordHash(password: string): Promise<string> {
+  return hashPassword(password);
+}
 
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma) as NextAuthOptions["adapter"],
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        
-        // Simple internal auth - in production, verify against database
-        const validUsers = [
-          { id: "1", email: "admin@company.com", name: "Admin User", role: "Admin" },
-          { id: "2", email: "manager@company.com", name: "Account Manager", role: "Account Manager" }
-        ];
-        
-        const user = validUsers.find(u => u.email === credentials.email);
-        if (user && credentials.password === "password") {
-          return user;
+
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+            include: { accounts: true },
+          });
+
+          if (!user) return null;
+
+          // Check for password in accounts (stored as refresh_token for credentials provider)
+          const credentialAccount = user.accounts.find(
+            (a) => a.provider === "credentials",
+          );
+          if (!credentialAccount?.refresh_token) return null;
+
+          const isValid = await verifyPassword(
+            credentials.password,
+            credentialAccount.refresh_token,
+          );
+          if (!isValid) return null;
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error("Auth error:", error);
+          return null;
         }
-        return null;
-      }
-    })
+      },
+    }),
   ],
   pages: {
     signIn: "/login",
@@ -43,9 +84,9 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as string;
       }
       return session;
-    }
+    },
   },
   session: {
-    strategy: "jwt"
-  }
+    strategy: "jwt",
+  },
 };

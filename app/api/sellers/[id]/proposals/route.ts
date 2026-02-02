@@ -1,31 +1,37 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { createAuditLog } from "@/lib/audit";
+import { withAuth, parseBody } from "@/lib/api-utils";
+import { createProposalSchema } from "@/lib/validation";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const GET = withAuth(async (request, { params }) => {
   const { id } = await params;
   const proposals = await prisma.proposal.findMany({
     where: { sellerId: id },
     orderBy: { createdAt: "desc" },
   });
   return NextResponse.json(proposals);
-}
+});
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const POST = withAuth(async (request, { params, session }) => {
   const { id } = await params;
-  const body = await request.json();
+  const parsed = await parseBody(request, createProposalSchema);
+  if (!parsed.success) return parsed.response;
+
   const proposal = await prisma.proposal.create({
     data: {
       sellerId: id,
-      fileName: body.fileName,
-      fileUrl: body.fileUrl,
-      shareable: body.shareable || false,
+      ...parsed.data,
     },
   });
-  return NextResponse.json(proposal);
-}
+
+  await createAuditLog(
+    session.user.id,
+    "CREATE_PROPOSAL",
+    "Proposal",
+    proposal.id,
+    `Created proposal: ${proposal.fileName}`,
+  );
+
+  return NextResponse.json(proposal, { status: 201 });
+});

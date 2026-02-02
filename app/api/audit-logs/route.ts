@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { withAuth } from "@/lib/api-utils";
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+export const GET = withAuth(async (request, { session }) => {
+  // Only Admin can view audit logs
+  if (session.user.role !== "Admin") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const logs = await prisma.auditLog.findMany({
@@ -14,4 +13,4 @@ export async function GET() {
     take: 100,
   });
   return NextResponse.json(logs);
-}
+});

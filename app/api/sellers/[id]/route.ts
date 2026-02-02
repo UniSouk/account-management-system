@@ -1,39 +1,37 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { createAuditLog } from "@/lib/audit";
+import { withAuth, parseBody } from "@/lib/api-utils";
+import { updateSellerSchema } from "@/lib/validation";
 
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+export const GET = withAuth(async (request, { params, session }) => {
   const { id } = await params;
   const seller = await prisma.seller.findUnique({ where: { id } });
+
   if (!seller) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ error: "Seller not found" }, { status: 404 });
   }
+
   return NextResponse.json(seller);
-}
+});
 
-export async function PUT(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+export const PUT = withAuth(async (request, { params, session }) => {
   const { id } = await params;
-  const body = await request.json();
+  const parsed = await parseBody(request, updateSellerSchema);
+  if (!parsed.success) return parsed.response;
+
   const seller = await prisma.seller.update({
     where: { id },
-    data: body,
+    data: parsed.data,
   });
+
+  await createAuditLog(
+    session.user.id,
+    "UPDATE_SELLER",
+    "Seller",
+    seller.id,
+    `Updated seller: ${seller.businessName}`,
+  );
+
   return NextResponse.json(seller);
-}
+});
