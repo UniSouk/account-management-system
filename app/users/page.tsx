@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -27,6 +27,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, Check } from "lucide-react";
 import axios from "axios";
@@ -44,7 +45,7 @@ interface NewUserResponse extends User {
 }
 
 export default function UsersPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -55,15 +56,12 @@ export default function UsersPage() {
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  // Redirect non-admins
-  if (session?.user?.role !== "Admin") {
-    router.push("/");
-    return null;
-  }
+  const isAdmin = session?.user?.role === "Admin";
 
   const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ["users"],
     queryFn: () => axios.get("/api/users").then((res) => res.data),
+    enabled: isAdmin,
   });
 
   const createMutation = useMutation({
@@ -93,6 +91,13 @@ export default function UsersPage() {
     },
   });
 
+  // Redirect non-admins after all hooks
+  useEffect(() => {
+    if (status === "authenticated" && !isAdmin) {
+      router.push("/");
+    }
+  }, [status, isAdmin, router]);
+
   const copyPassword = () => {
     if (newUser?.tempPassword) {
       navigator.clipboard.writeText(newUser.tempPassword);
@@ -100,6 +105,27 @@ export default function UsersPage() {
       setTimeout(() => setCopied(false), 2000);
     }
   };
+
+  // Show loading while checking auth
+  if (status === "loading") {
+    return (
+      <AppLayout>
+        <div className="space-y-6">
+          <Skeleton className="h-8 w-48" />
+          <Card>
+            <CardContent className="p-6">
+              <Skeleton className="h-32 w-full" />
+            </CardContent>
+          </Card>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  // Don't render content for non-admins
+  if (!isAdmin) {
+    return null;
+  }
 
   return (
     <AppLayout>
@@ -112,7 +138,6 @@ export default function UsersPage() {
           </Button>
         </div>
 
-        {/* New User Created Alert */}
         {newUser && (
           <Alert className="bg-green-50 border-green-200">
             <AlertDescription>
@@ -149,7 +174,6 @@ export default function UsersPage() {
           </Alert>
         )}
 
-        {/* Add User Form */}
         {showAddForm && (
           <Card>
             <CardHeader>
@@ -201,7 +225,6 @@ export default function UsersPage() {
           </Card>
         )}
 
-        {/* Users Table */}
         <Card>
           <CardContent className="p-0">
             <Table>
@@ -254,7 +277,6 @@ export default function UsersPage() {
           </CardContent>
         </Card>
 
-        {/* Delete Confirmation */}
         <AlertDialog
           open={!!deleteUserId}
           onOpenChange={() => setDeleteUserId(null)}
